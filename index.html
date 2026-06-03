@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio — 2D Animator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1210;
+    --cream: #f5f0e8;
+    --rust: #c4572a;
+    --gold: #d4a843;
+    --muted: #7a6e65;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATED CANVAS BG ── */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.18;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(245,240,232,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(26,18,16,0.08);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+
+  .logo span { color: var(--rust); font-style: italic; }
+
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--rust); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 2rem; height: 1px;
+    background: var(--rust);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 1.05;
+    font-weight: 700;
+    color: var(--ink);
+    max-width: 14ch;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero-sub {
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 40ch;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex; gap: 1.2rem; flex-wrap: wrap; align-items: center;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
+
+  .btn-ghost {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--rust); color: var(--rust); }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── WORK ── */
+  .work {
+    position: relative; z-index: 1;
+    padding: 6rem 3rem;
+  }
+
+  .work-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3.5rem;
+    flex-wrap: wrap; gap: 1rem;
+  }
+
+  .work-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+  }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .work-card {
+    position: relative;
+    background: var(--ink);
+    border-radius: 3px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .work-card:hover { transform: translateY(-4px); }
+
+  .work-card-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .work-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,18,16,0.9) 0%, rgba(26,18,16,0.1) 60%);
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    transition: opacity 0.3s;
+  }
+
+  .work-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+  }
+
+  .work-card p {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .work-card-tag {
+    position: absolute; top: 1rem; right: 1rem;
+    background: var(--rust);
+    color: var(--cream);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 1px;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    position: relative; z-index: 1;
+    padding: 6rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .about h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .about h2 em { color: var(--gold); font-style: italic; }
+
+  .about p {
+    color: rgba(245,240,232,0.7);
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+
+  .skills-list {
+    margin-top: 2rem;
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+  }
+
+  .skill-tag {
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(245,240,232,0.2);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.7);
+    letter-spacing: 0.05em;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 380px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    position: relative; z-index: 1;
+    padding: 6rem 3rem;
+    text-align: center;
+  }
+
+  .contact h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1rem;
+  }
+
+  .contact h2 em { color: var(--rust); font-style: italic; }
+
+  .contact p {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .contact-email {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--rust);
+    padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .contact-email:hover { color: var(--rust); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(26,18,16,0.1);
+    padding: 1.5rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    flex-wrap: wrap; gap: 1rem;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 700px) {
+    nav ul { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .work { padding: 4rem 1.5rem; }
+    .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+    .about-visual { height: 240px; }
+    .contact { padding: 4rem 1.5rem; }
+    footer { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <div class="logo">Anim<span>ista</span></div>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">2D Animator & Motion Artist</div>
+  <h1>Bringing <em>stories</em> to life, frame by frame.</h1>
+  <p class="hero-sub">I craft expressive 2D animations — from character rigs to full motion sequences — that feel alive and unforgettable.</p>
+  <div class="hero-cta">
+    <a href="#work" class="btn-primary">View My Work</a>
+    <a href="#contact" class="btn-ghost">Get In Touch</a>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="work-header reveal">
+    <div>
+      <div class="section-label">Selected Projects</div>
+      <h2>My Work</h2>
+    </div>
+    <a href="#" class="btn-ghost">View All</a>
+  </div>
+
+  <div class="work-grid">
+    <div class="work-card reveal" style="transition-delay:0.1s">
+      <div class="work-card-bg">
+        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#2a1f3d"/>
+          <circle cx="200" cy="120" r="55" fill="#7b5ea7" opacity="0.6"/>
+          <circle cx="200" cy="120" r="35" fill="#9b7fc7" opacity="0.8"/>
+          <ellipse cx="200" cy="200" rx="70" ry="20" fill="#5a3d8a" opacity="0.5"/>
+          <path d="M170 105 Q200 80 230 105" stroke="#e8d5ff" stroke-width="2" fill="none" opacity="0.7"/>
+          <circle cx="186" cy="115" r="6" fill="#f0e8ff"/>
+          <circle cx="214" cy="115" r="6" fill="#f0e8ff"/>
+          <path d="M190 130 Q200 138 210 130" stroke="#e8d5ff" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="work-card-tag">Character</div>
+      <div class="work-card-overlay">
+        <h3>The Night Wanderer</h3>
+        <p>Short film · 4 min</p>
+      </div>
+    </div>
+
+    <div class="work-card reveal" style="transition-delay:0.2s">
+      <div class="work-card-bg">
+        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#1a2e1a"/>
+          <ellipse cx="200" cy="280" rx="200" ry="60" fill="#2d4a1e" opacity="0.8"/>
+          <rect x="160" y="80" width="80" height="200" fill="#3d6b2a" rx="4"/>
+          <rect x="175" y="60" width="50" height="30" fill="#4a8032" rx="3"/>
+          <circle cx="100" cy="160" r="40" fill="#2d5c1e" opacity="0.7"/>
+          <circle cx="300" cy="180" r="30" fill="#2d5c1e" opacity="0.6"/>
+          <circle cx="200" cy="50" r="20" fill="#f5c842" opacity="0.9"/>
+          <path d="M0 220 Q100 190 200 210 Q300 230 400 200 L400 300 L0 300Z" fill="#1a3d0a" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="work-card-tag">Environment</div>
+      <div class="work-card-overlay">
+        <h3>Forest Spirit</h3>
+        <p>Game cutscene · 2 min</p>
+      </div>
+    </div>
+
+    <div class="work-card reveal" style="transition-delay:0.3s">
+      <div class="work-card-bg">
+        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#1a0a0a"/>
+          <circle cx="200" cy="150" r="80" fill="none" stroke="#c4572a" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="200" cy="150" r="50" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.4"/>
+          <circle cx="200" cy="150" r="25" fill="#c4572a" opacity="0.7"/>
+          <path d="M120 70 Q200 40 280 70 Q320 150 280 230 Q200 260 120 230 Q80 150 120 70" stroke="#c4572a" stroke-width="1" fill="none" opacity="0.3"/>
+          <path d="M200 70 L220 140 L200 150 L180 140Z" fill="#d4a843" opacity="0.8"/>
+        </svg>
+      </div>
+      <div class="work-card-tag">Explainer</div>
+      <div class="work-card-overlay">
+        <h3>Brand Motion Reel</h3>
+        <p>Commercial · 30 sec</p>
+      </div>
+    </div>
+
+    <div class="work-card reveal" style="transition-delay:0.4s">
+      <div class="work-card-bg">
+        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0d1a2e"/>
+          <rect x="0" y="200" width="400" height="100" fill="#0a1220"/>
+          <circle cx="200" cy="90" r="50" fill="#1a3a6e" opacity="0.5"/>
+          <path d="M50 200 Q100 160 150 200 Q200 240 250 200 Q300 160 350 200" stroke="#4a90d9" stroke-width="2" fill="none" opacity="0.6"/>
+          <path d="M50 220 Q125 180 200 220 Q275 260 350 220" stroke="#2a70b9" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <circle cx="200" cy="90" r="20" fill="#f5f0e8" opacity="0.9"/>
+          <path d="M185 90 L200 75 L215 90" stroke="#d4a843" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="work-card-tag">MV</div>
+      <div class="work-card-overlay">
+        <h3>Lunar Drift</h3>
+        <p>Music video · 3 min</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="reveal">
+    <div class="section-label" style="color:rgba(245,240,232,0.4)">About Me</div>
+    <h2>Passion for <em>motion</em>, obsession with craft.</h2>
+    <p>I'm a 2D animator with a love for expressive character work, world-building, and storytelling through movement. Every frame is an opportunity to make something feel alive.</p>
+    <p>From indie short films to commercial spots, I bring the same energy and care to every project — whether it's a 30-second ad or a 10-minute film.</p>
+    <div class="skills-list">
+      <span class="skill-tag">Character Animation</span>
+      <span class="skill-tag">Frame-by-Frame</span>
+      <span class="skill-tag">Rigging</span>
+      <span class="skill-tag">Toon Boom</span>
+      <span class="skill-tag">After Effects</span>
+      <span class="skill-tag">Storyboarding</span>
+      <span class="skill-tag">Motion Graphics</span>
+    </div>
+  </div>
+  <div class="about-visual reveal" style="transition-delay:0.2s">
+    <svg viewBox="0 0 320 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <g id="spiral-anim">
+        <path d="M160 160 Q220 100 160 60 Q100 20 60 80 Q20 140 80 180 Q140 220 200 180 Q260 140 240 80" stroke="#c4572a" stroke-width="1.5" fill="none" opacity="0.6">
+          <animate attributeName="stroke-dasharray" from="0 1000" to="1000 0" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M160 160 Q100 220 140 260 Q180 300 230 260 Q280 220 260 160 Q240 100 180 90" stroke="#d4a843" stroke-width="1" fill="none" opacity="0.5">
+          <animate attributeName="stroke-dasharray" from="0 1000" to="1000 0" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+        </path>
+        <path d="M160 160 Q130 130 100 140 Q70 150 70 180 Q70 210 100 220 Q130 230 150 210" stroke="rgba(245,240,232,0.4)" stroke-width="1" fill="none">
+          <animate attributeName="stroke-dasharray" from="0 500" to="500 0" dur="2.5s" begin="1s" repeatCount="indefinite"/>
+        </path>
+        <circle cx="160" cy="160" r="4" fill="#c4572a">
+          <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="160" y="290" text-anchor="middle" fill="rgba(245,240,232,0.3)" font-family="'Playfair Display',serif" font-style="italic" font-size="13">in motion</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label reveal">Let's Work Together</div>
+  <h2 class="reveal">Got a <em>project</em> in mind?</h2>
+  <p class="reveal">I'm available for freelance animation, short films, and commercial work.</p>
+  <a href="mailto:hello@yourname.com" class="contact-email reveal">hello@yourname.com</a>
+</section>
+
+<footer>
+  <div>© 2026 Your Name — 2D Animator</div>
+  <div>Stockholm, SE</div>
+</footer>
+
+<script>
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const lines = [];
+const NUM_LINES = 8;
+
+function randomLine() {
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight;
+  const angle = Math.random() * Math.PI * 2;
+  const speed = 0.4 + Math.random() * 0.5;
+  const curl = (Math.random() - 0.5) * 0.015;
+  const maxLen = 300 + Math.random() * 400;
+  return {
+    x: startX, y: startY,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    curl, maxLen,
+    points: [[startX, startY]],
+    age: 0,
+    hue: Math.random() > 0.5 ? '#c4572a' : '#1a1210',
+    width: 0.5 + Math.random() * 1.2,
+    done: false
+  };
+}
+
+for (let i = 0; i < NUM_LINES; i++) {
+  const l = randomLine();
+  l.age = Math.random() * l.maxLen;
+  lines.push(l);
+}
+
+let spirals = [];
+function addSpiral() {
+  const cx = Math.random() * window.innerWidth;
+  const cy = Math.random() * window.innerHeight;
+  spirals.push({ cx, cy, t: 0, maxT: 8 * Math.PI, speed: 0.04 + Math.random() * 0.03 });
+}
+for (let i = 0; i < 3; i++) addSpiral();
+
+function drawLine(line) {
+  if (line.points.length < 2) return;
+  ctx.beginPath();
+  ctx.strokeStyle = line.hue;
+  ctx.lineWidth = line.width;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.moveTo(line.points[0][0], line.points[0][1]);
+  for (let i = 1; i < line.points.length; i++) {
+    ctx.lineTo(line.points[i][0], line.points[i][1]);
+  }
+  ctx.stroke();
+}
+
+function tick() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw spirals
+  for (let s of spirals) {
+    if (s.t > s.maxT) continue;
+    ctx.beginPath();
+    ctx.strokeStyle = '#c4572a';
+    ctx.lineWidth = 0.6;
+    let prevX = s.cx, prevY = s.cy;
+    const steps = Math.floor(s.t / 0.1);
+    for (let i = 0; i < steps; i++) {
+      const tt = i * 0.1;
+      const r = 4 + tt * 8;
+      const x = s.cx + Math.cos(tt) * r;
+      const y = s.cy + Math.sin(tt) * r;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    s.t += s.speed;
+    if (s.t > s.maxT) {
+      const idx = spirals.indexOf(s);
+      spirals.splice(idx, 1, { cx: Math.random() * window.innerWidth, cy: Math.random() * window.innerHeight, t: 0, maxT: 8 * Math.PI, speed: 0.04 + Math.random() * 0.03 });
+    }
+  }
+
+  // Draw brush lines
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (!l.done) {
+      const angle = Math.atan2(l.vy, l.vx) + l.curl;
+      const speed = Math.sqrt(l.vx * l.vx + l.vy * l.vy);
+      l.vx = Math.cos(angle) * speed;
+      l.vy = Math.sin(angle) * speed;
+      const nx = l.x + l.vx;
+      const ny = l.y + l.vy;
+      l.points.push([nx, nx !== l.x ? ny : l.y]);
+      l.points[l.points.length - 1] = [nx, ny];
+      l.x = nx; l.y = ny;
+      l.age++;
+      if (l.age > l.maxLen) l.done = true;
+      if (l.x < -50 || l.x > window.innerWidth + 50 || l.y < -50 || l.y > window.innerHeight + 50) l.done = true;
+    }
+    drawLine(l);
+    if (l.done) lines[i] = randomLine();
+  }
+
+  requestAnimationFrame(tick);
+}
+tick();
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
