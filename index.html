@@ -1,363 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Portfolio — 2D Animator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<title>UMINO — Umaima Saeed Qazi · 2D Animator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --white:#fafaf8;
+  --off:#f2f0eb;
+  --ink:#1c1b19;
+  --muted:#8a8780;
+  --accent:#b85c38;
+  --accent2:#d4a853;
+  --border:rgba(28,27,25,0.09);
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--white);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+}
 
-  :root {
-    --ink: #1a1210;
-    --cream: #f5f0e8;
-    --rust: #c4572a;
-    --gold: #d4a843;
-    --muted: #7a6e65;
-  }
+/* custom cursor */
+.cursor{
+  position:fixed;width:8px;height:8px;
+  background:var(--ink);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,background 0.2s,width 0.2s,height 0.2s;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(28,27,25,0.3);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.15s ease;
+}
+.cursor.hover{width:14px;height:14px;background:var(--accent);}
+.cursor-ring.hover{width:48px;height:48px;border-color:var(--accent);opacity:0.5;}
 
-  html { scroll-behavior: smooth; }
+/* canvas */
+#bg{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;
+  opacity:0.07;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    overflow-x: hidden;
-  }
+/* nav */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.4rem 4rem;
+  mix-blend-mode:multiply;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+}
+nav ul{list-style:none;display:flex;gap:2.5rem;}
+nav a:not(.logo){
+  text-decoration:none;
+  font-size:0.78rem;font-weight:400;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  transition:color 0.2s;
+}
+nav a:hover:not(.logo){color:var(--accent);}
 
-  /* ── ANIMATED CANVAS BG ── */
-  #bg-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.18;
-  }
+/* hero */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:0 4rem;
+  gap:4rem;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-size:0.72rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:1.8rem;
+  display:flex;align-items:center;gap:0.8rem;
+}
+.hero-eyebrow::before{
+  content:'';width:2.5rem;height:1px;
+  background:var(--accent);display:inline-block;
+}
+h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,7vw,6.5rem);
+  line-height:0.95;
+  font-weight:300;
+  color:var(--ink);
+  margin-bottom:2rem;
+}
+h1 em{font-style:italic;color:var(--accent);}
+.hero-desc{
+  font-size:1rem;font-weight:300;
+  color:var(--muted);line-height:1.8;
+  max-width:38ch;margin-bottom:2.5rem;
+}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn{
+  display:inline-block;padding:0.8rem 2rem;
+  font-size:0.75rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;border-radius:1px;
+  transition:all 0.2s;
+}
+.btn-dark{background:var(--ink);color:var(--white);}
+.btn-dark:hover{background:var(--accent);}
+.btn-outline{border:1px solid var(--ink);color:var(--ink);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 3rem;
-    background: rgba(245,240,232,0.85);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(26,18,16,0.08);
-  }
+.hero-right{
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-graphic{
+  width:100%;max-width:400px;
+  aspect-ratio:1;
+  position:relative;
+}
 
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--ink);
-  }
+/* scroll indicator */
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:4rem;
+  display:flex;align-items:center;gap:0.75rem;
+  font-size:0.7rem;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--muted);
+  z-index:1;
+}
+.scroll-line{
+  width:2rem;height:1px;
+  background:var(--muted);
+  animation:scrollPulse 2s infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{transform:scaleX(1);opacity:0.5;}
+  50%{transform:scaleX(1.4);opacity:1;}
+}
 
-  .logo span { color: var(--rust); font-style: italic; }
+/* section base */
+section{position:relative;z-index:1;}
+.section-header{margin-bottom:3.5rem;}
+.section-label{
+  font-size:0.7rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:0.6rem;
+}
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,4vw,3.2rem);
+  font-weight:300;line-height:1.1;
+}
+.section-title em{font-style:italic;}
 
-  nav ul { list-style: none; display: flex; gap: 2.5rem; }
-  nav a {
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: color 0.2s;
-  }
-  nav a:hover { color: var(--rust); }
+/* work */
+.work{padding:6rem 4rem;}
+.work-header{
+  display:flex;justify-content:space-between;
+  align-items:flex-end;margin-bottom:3.5rem;flex-wrap:wrap;gap:1rem;
+}
+.project-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.project-card{
+  position:relative;background:var(--off);
+  border-radius:2px;overflow:hidden;
+  cursor:none;
+}
+.project-card:nth-child(1){grid-column:span 2;}
+.project-card:nth-child(4){grid-column:span 2;}
 
-  /* ── HERO ── */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8rem 3rem 4rem;
-    z-index: 1;
-  }
+.card-media{
+  width:100%;aspect-ratio:16/9;
+  overflow:hidden;position:relative;
+  background:var(--ink);
+}
+.card-media video{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  transition:transform 0.6s ease;
+}
+.project-card:hover .card-media video{transform:scale(1.04);}
 
-  .hero-tag {
-    font-size: 0.78rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--rust);
-    margin-bottom: 1.5rem;
-    display: flex; align-items: center; gap: 0.75rem;
-  }
-  .hero-tag::before {
-    content: '';
-    display: inline-block;
-    width: 2rem; height: 1px;
-    background: var(--rust);
-  }
+/* placeholder visual when no video */
+.card-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
 
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 8vw, 7rem);
-    line-height: 1.05;
-    font-weight: 700;
-    color: var(--ink);
-    max-width: 14ch;
-  }
+.card-info{padding:1.25rem 1.5rem 1.5rem;}
+.card-tag{
+  font-size:0.65rem;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:0.4rem;
+}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;font-weight:400;
+  margin-bottom:0.3rem;
+}
+.card-desc{
+  font-size:0.82rem;font-weight:300;
+  color:var(--muted);line-height:1.6;
+}
+.card-tool{
+  margin-top:0.75rem;
+  font-size:0.65rem;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--muted);
+  opacity:0.7;
+}
 
-  .hero h1 em {
-    font-style: italic;
-    color: var(--rust);
-  }
+/* upload zone */
+.upload-section{
+  padding:4rem;
+  border:1px dashed rgba(28,27,25,0.18);
+  border-radius:2px;
+  margin:0 4rem 4rem;
+  text-align:center;
+  background:var(--off);
+}
+.upload-section h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem;font-weight:300;
+  margin-bottom:0.5rem;
+}
+.upload-section p{
+  font-size:0.85rem;color:var(--muted);
+  font-weight:300;margin-bottom:1.5rem;
+}
+.upload-grid{
+  display:flex;flex-wrap:wrap;gap:1rem;
+  justify-content:center;margin-top:1.5rem;
+}
+.upload-slot{
+  width:160px;padding:1rem;
+  border:1px dashed rgba(28,27,25,0.2);
+  border-radius:2px;background:var(--white);
+  font-size:0.75rem;color:var(--muted);
+  cursor:pointer;transition:border-color 0.2s;
+}
+.upload-slot:hover{border-color:var(--accent);}
+.upload-slot input{display:none;}
+.upload-slot .slot-name{
+  margin-top:0.4rem;font-size:0.7rem;
+  color:var(--ink);font-weight:500;
+}
+.upload-slot.loaded{border-color:var(--accent);border-style:solid;}
 
-  .hero-sub {
-    margin-top: 2rem;
-    font-size: 1.05rem;
-    color: var(--muted);
-    max-width: 40ch;
-    line-height: 1.7;
-    font-weight: 300;
-  }
+/* about */
+.about{
+  padding:7rem 4rem;
+  background:var(--ink);color:var(--white);
+  display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;
+}
+.about .section-label{color:rgba(255,255,255,0.35);}
+.about .section-title{color:var(--white);}
+.about .section-title em{color:var(--accent2);}
+.about p{
+  font-size:1rem;font-weight:300;
+  color:rgba(255,255,255,0.6);
+  line-height:1.85;margin-bottom:1rem;
+}
+.tools-row{
+  margin-top:2rem;
+  display:flex;flex-wrap:wrap;gap:0.5rem;
+}
+.tool-chip{
+  padding:0.4rem 1rem;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:100px;
+  font-size:0.72rem;letter-spacing:0.06em;
+  color:rgba(255,255,255,0.55);
+}
+.about-right{position:relative;}
+.about-stat-stack{display:flex;flex-direction:column;gap:1.5rem;}
+.about-stat{
+  padding:1.5rem;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:2px;
+}
+.about-stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;font-weight:300;
+  color:var(--accent2);line-height:1;
+  margin-bottom:0.25rem;
+}
+.about-stat-label{
+  font-size:0.75rem;letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+}
 
-  .hero-cta {
-    margin-top: 3rem;
-    display: flex; gap: 1.2rem; flex-wrap: wrap; align-items: center;
-  }
+/* contact */
+.contact{
+  padding:8rem 4rem;
+  text-align:center;
+}
+.contact h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,6vw,5rem);
+  font-weight:300;margin-bottom:1rem;
+  line-height:1.05;
+}
+.contact h2 em{font-style:italic;color:var(--accent);}
+.contact p{
+  font-size:0.95rem;color:var(--muted);
+  font-weight:300;margin-bottom:2.5rem;
+}
+.contact-email{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;color:var(--ink);
+  text-decoration:none;
+  border-bottom:1px solid var(--accent);
+  padding-bottom:2px;
+  transition:color 0.2s;
+}
+.contact-email:hover{color:var(--accent);}
+.social-row{
+  margin-top:2.5rem;
+  display:flex;gap:1.5rem;justify-content:center;
+}
+.social-link{
+  font-size:0.72rem;letter-spacing:0.14em;
+  text-transform:uppercase;
+  text-decoration:none;color:var(--muted);
+  transition:color 0.2s;
+}
+.social-link:hover{color:var(--accent);}
 
-  .btn-primary {
-    display: inline-block;
-    padding: 0.85rem 2rem;
-    background: var(--ink);
-    color: var(--cream);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
+/* footer */
+footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.72rem;color:var(--muted);
+  letter-spacing:0.06em;
+  flex-wrap:wrap;gap:1rem;
+  z-index:1;position:relative;
+}
 
-  .btn-ghost {
-    display: inline-block;
-    padding: 0.85rem 2rem;
-    border: 1px solid var(--ink);
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .btn-ghost:hover { border-color: var(--rust); color: var(--rust); }
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.visible{opacity:1;transform:none;}
 
-  /* ── SECTION LABEL ── */
-  .section-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.75rem;
-  }
-
-  /* ── WORK ── */
-  .work {
-    position: relative; z-index: 1;
-    padding: 6rem 3rem;
-  }
-
-  .work-header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 3.5rem;
-    flex-wrap: wrap; gap: 1rem;
-  }
-
-  .work-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-  }
-
-  .work-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .work-card {
-    position: relative;
-    background: var(--ink);
-    border-radius: 3px;
-    overflow: hidden;
-    aspect-ratio: 4/3;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  .work-card:hover { transform: translateY(-4px); }
-
-  .work-card-bg {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .work-card-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(26,18,16,0.9) 0%, rgba(26,18,16,0.1) 60%);
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 1.5rem;
-    transition: opacity 0.3s;
-  }
-
-  .work-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    color: var(--cream);
-    margin-bottom: 0.25rem;
-  }
-
-  .work-card p {
-    font-size: 0.78rem;
-    color: rgba(245,240,232,0.6);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .work-card-tag {
-    position: absolute; top: 1rem; right: 1rem;
-    background: var(--rust);
-    color: var(--cream);
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.7rem;
-    border-radius: 1px;
-  }
-
-  /* ── ABOUT ── */
-  .about {
-    position: relative; z-index: 1;
-    padding: 6rem 3rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-    background: var(--ink);
-    color: var(--cream);
-  }
-
-  .about h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 3.5vw, 2.8rem);
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-  }
-
-  .about h2 em { color: var(--gold); font-style: italic; }
-
-  .about p {
-    color: rgba(245,240,232,0.7);
-    line-height: 1.8;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    font-weight: 300;
-  }
-
-  .skills-list {
-    margin-top: 2rem;
-    display: flex; flex-wrap: wrap; gap: 0.6rem;
-  }
-
-  .skill-tag {
-    padding: 0.4rem 1rem;
-    border: 1px solid rgba(245,240,232,0.2);
-    border-radius: 100px;
-    font-size: 0.78rem;
-    color: rgba(245,240,232,0.7);
-    letter-spacing: 0.05em;
-  }
-
-  .about-visual {
-    position: relative;
-    height: 380px;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* ── CONTACT ── */
-  .contact {
-    position: relative; z-index: 1;
-    padding: 6rem 3rem;
-    text-align: center;
-  }
-
-  .contact h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    margin-bottom: 1rem;
-  }
-
-  .contact h2 em { color: var(--rust); font-style: italic; }
-
-  .contact p {
-    color: var(--muted);
-    font-size: 1rem;
-    margin-bottom: 2.5rem;
-    font-weight: 300;
-  }
-
-  .contact-email {
-    display: inline-block;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 2px solid var(--rust);
-    padding-bottom: 2px;
-    transition: color 0.2s;
-  }
-  .contact-email:hover { color: var(--rust); }
-
-  /* ── FOOTER ── */
-  footer {
-    position: relative; z-index: 1;
-    border-top: 1px solid rgba(26,18,16,0.1);
-    padding: 1.5rem 3rem;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 0.78rem;
-    color: var(--muted);
-    flex-wrap: wrap; gap: 1rem;
-  }
-
-  /* ── SCROLL REVEAL ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  @media (max-width: 700px) {
-    nav ul { display: none; }
-    nav { padding: 1rem 1.5rem; }
-    .hero { padding: 7rem 1.5rem 3rem; }
-    .work { padding: 4rem 1.5rem; }
-    .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
-    .about-visual { height: 240px; }
-    .contact { padding: 4rem 1.5rem; }
-    footer { padding: 1.5rem; }
-  }
+/* responsive */
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem;}
+  .hero{grid-template-columns:1fr;padding:7rem 1.5rem 3rem;gap:3rem;}
+  .hero-right{display:none;}
+  .work{padding:4rem 1.5rem;}
+  .project-grid{grid-template-columns:1fr;}
+  .project-card:nth-child(1),.project-card:nth-child(4){grid-column:span 1;}
+  .upload-section{margin:0 1.5rem 3rem;padding:2.5rem 1.5rem;}
+  .about{grid-template-columns:1fr;padding:4rem 1.5rem;gap:3rem;}
+  .contact{padding:5rem 1.5rem;}
+  footer{padding:1.5rem;}
+  .scroll-hint{left:1.5rem;}
+}
 </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+<canvas id="bg"></canvas>
 
 <nav>
-  <div class="logo">Anim<span>ista</span></div>
+  <a class="logo" href="#">Umino</a>
   <ul>
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -367,277 +395,370 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-tag">2D Animator & Motion Artist</div>
-  <h1>Bringing <em>stories</em> to life, frame by frame.</h1>
-  <p class="hero-sub">I craft expressive 2D animations — from character rigs to full motion sequences — that feel alive and unforgettable.</p>
-  <div class="hero-cta">
-    <a href="#work" class="btn-primary">View My Work</a>
-    <a href="#contact" class="btn-ghost">Get In Touch</a>
+  <div class="hero-left">
+    <div class="hero-eyebrow">2D Animator · Motion Designer</div>
+    <h1>Motion<br/>that <em>speaks</em><br/>for itself.</h1>
+    <p class="hero-desc">I'm Umaima — I bring ideas to life through expressive 2D animation, character movement, and storytelling. Fresh from Hyper Island, open to the world.</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn btn-dark">See My Work</a>
+      <a href="#contact" class="btn btn-outline">Let's Talk</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-graphic">
+      <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.12" stroke="#1c1b19" fill="none">
+          <circle cx="200" cy="200" r="160" stroke-width="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="40s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="200" r="120" stroke-width="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="-360 200 200" dur="28s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="200" r="80" stroke-width="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="18s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+        <!-- animated spirograph -->
+        <path fill="none" stroke="#b85c38" stroke-width="0.8" opacity="0.6">
+          <animate attributeName="d" dur="8s" repeatCount="indefinite"
+            values="M200,200 Q240,100 300,150 Q360,200 300,260 Q240,320 180,280 Q120,240 140,180 Q160,120 200,200;
+                    M200,200 Q260,80 320,160 Q380,240 300,300 Q220,360 160,300 Q100,240 120,160 Q140,80 200,200;
+                    M200,200 Q240,100 300,150 Q360,200 300,260 Q240,320 180,280 Q120,240 140,180 Q160,120 200,200"/>
+        </path>
+        <circle cx="200" cy="200" r="4" fill="#b85c38" opacity="0.8">
+          <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <!-- orbit dot -->
+        <circle r="3" fill="#d4a853" opacity="0.7">
+          <animateMotion dur="6s" repeatCount="indefinite" path="M0,0 a120,120 0 1,1 0.01,0"/>
+          <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-line"></span>
+    Scroll to explore
   </div>
 </section>
 
 <!-- WORK -->
 <section class="work" id="work">
   <div class="work-header reveal">
-    <div>
-      <div class="section-label">Selected Projects</div>
-      <h2>My Work</h2>
+    <div class="section-header" style="margin-bottom:0">
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">Animations &amp; <em>Projects</em></h2>
     </div>
-    <a href="#" class="btn-ghost">View All</a>
   </div>
 
-  <div class="work-grid">
-    <div class="work-card reveal" style="transition-delay:0.1s">
-      <div class="work-card-bg">
-        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#2a1f3d"/>
-          <circle cx="200" cy="120" r="55" fill="#7b5ea7" opacity="0.6"/>
-          <circle cx="200" cy="120" r="35" fill="#9b7fc7" opacity="0.8"/>
-          <ellipse cx="200" cy="200" rx="70" ry="20" fill="#5a3d8a" opacity="0.5"/>
-          <path d="M170 105 Q200 80 230 105" stroke="#e8d5ff" stroke-width="2" fill="none" opacity="0.7"/>
-          <circle cx="186" cy="115" r="6" fill="#f0e8ff"/>
-          <circle cx="214" cy="115" r="6" fill="#f0e8ff"/>
-          <path d="M190 130 Q200 138 210 130" stroke="#e8d5ff" stroke-width="2" fill="none"/>
-        </svg>
+  <div class="project-grid">
+
+    <!-- Card 1 -->
+    <div class="project-card reveal" style="transition-delay:0.05s" id="card-daynight">
+      <div class="card-media">
+        <video id="vid-daynight" loop muted playsinline preload="none" poster="">
+          <source src="videos/day-night.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-daynight">
+          <svg viewBox="0 0 480 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a4a"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs>
+            <rect width="480" height="270" fill="url(#sky1)"/>
+            <ellipse cx="380" cy="60" rx="38" ry="38" fill="#f5c842" opacity="0.9"/>
+            <rect x="0" y="200" width="480" height="70" fill="#2d4a1e" opacity="0.85"/>
+            <ellipse cx="80" cy="200" rx="50" ry="35" fill="#1e3b14" opacity="0.7"/>
+            <ellipse cx="400" cy="195" rx="60" ry="40" fill="#1e3b14" opacity="0.6"/>
+            <text x="240" y="148" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="'Cormorant Garamond',serif" font-size="13" letter-spacing="4">day · night transition</text>
+          </svg>
+        </div>
       </div>
-      <div class="work-card-tag">Character</div>
-      <div class="work-card-overlay">
-        <h3>The Night Wanderer</h3>
-        <p>Short film · 4 min</p>
+      <div class="card-info">
+        <div class="card-tag">Environment · Loop</div>
+        <div class="card-title">Day to Night</div>
+        <div class="card-desc">A seamless looping scene capturing the magic hour — the sky shifts from warm golden light into a deep, star-lit night.</div>
+        <div class="card-tool">After Effects</div>
       </div>
     </div>
 
-    <div class="work-card reveal" style="transition-delay:0.2s">
-      <div class="work-card-bg">
-        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#1a2e1a"/>
-          <ellipse cx="200" cy="280" rx="200" ry="60" fill="#2d4a1e" opacity="0.8"/>
-          <rect x="160" y="80" width="80" height="200" fill="#3d6b2a" rx="4"/>
-          <rect x="175" y="60" width="50" height="30" fill="#4a8032" rx="3"/>
-          <circle cx="100" cy="160" r="40" fill="#2d5c1e" opacity="0.7"/>
-          <circle cx="300" cy="180" r="30" fill="#2d5c1e" opacity="0.6"/>
-          <circle cx="200" cy="50" r="20" fill="#f5c842" opacity="0.9"/>
-          <path d="M0 220 Q100 190 200 210 Q300 230 400 200 L400 300 L0 300Z" fill="#1a3d0a" opacity="0.6"/>
-        </svg>
+    <!-- Card 2 -->
+    <div class="project-card reveal" style="transition-delay:0.1s" id="card-ball">
+      <div class="card-media">
+        <video id="vid-ball" loop muted playsinline preload="none">
+          <source src="videos/bouncing-ball.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-ball">
+          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="240" height="270" fill="#1c1b19"/>
+            <ellipse cx="120" cy="248" rx="40" ry="6" fill="#333" opacity="0.7"/>
+            <circle cx="120" cy="80" r="38" fill="#b85c38" opacity="0.9">
+              <animate attributeName="cy" values="80;220;80" dur="1.2s" keyTimes="0;0.5;1" keySplines="0.5 0 1 1; 0 0 0.5 1" calcMode="spline" repeatCount="indefinite"/>
+            </circle>
+            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">bouncing ball</text>
+          </svg>
+        </div>
       </div>
-      <div class="work-card-tag">Environment</div>
-      <div class="work-card-overlay">
-        <h3>Forest Spirit</h3>
-        <p>Game cutscene · 2 min</p>
-      </div>
-    </div>
-
-    <div class="work-card reveal" style="transition-delay:0.3s">
-      <div class="work-card-bg">
-        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#1a0a0a"/>
-          <circle cx="200" cy="150" r="80" fill="none" stroke="#c4572a" stroke-width="1.5" opacity="0.5"/>
-          <circle cx="200" cy="150" r="50" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.4"/>
-          <circle cx="200" cy="150" r="25" fill="#c4572a" opacity="0.7"/>
-          <path d="M120 70 Q200 40 280 70 Q320 150 280 230 Q200 260 120 230 Q80 150 120 70" stroke="#c4572a" stroke-width="1" fill="none" opacity="0.3"/>
-          <path d="M200 70 L220 140 L200 150 L180 140Z" fill="#d4a843" opacity="0.8"/>
-        </svg>
-      </div>
-      <div class="work-card-tag">Explainer</div>
-      <div class="work-card-overlay">
-        <h3>Brand Motion Reel</h3>
-        <p>Commercial · 30 sec</p>
+      <div class="card-info">
+        <div class="card-tag">Principles · Exercise</div>
+        <div class="card-title">Bouncing Ball</div>
+        <div class="card-desc">The classic animation foundation — squash, stretch, anticipation and follow-through, perfected.</div>
+        <div class="card-tool">After Effects</div>
       </div>
     </div>
 
-    <div class="work-card reveal" style="transition-delay:0.4s">
-      <div class="work-card-bg">
-        <svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0d1a2e"/>
-          <rect x="0" y="200" width="400" height="100" fill="#0a1220"/>
-          <circle cx="200" cy="90" r="50" fill="#1a3a6e" opacity="0.5"/>
-          <path d="M50 200 Q100 160 150 200 Q200 240 250 200 Q300 160 350 200" stroke="#4a90d9" stroke-width="2" fill="none" opacity="0.6"/>
-          <path d="M50 220 Q125 180 200 220 Q275 260 350 220" stroke="#2a70b9" stroke-width="1.5" fill="none" opacity="0.4"/>
-          <circle cx="200" cy="90" r="20" fill="#f5f0e8" opacity="0.9"/>
-          <path d="M185 90 L200 75 L215 90" stroke="#d4a843" stroke-width="2" fill="none"/>
-        </svg>
+    <!-- Card 3 -->
+    <div class="project-card reveal" style="transition-delay:0.15s" id="card-pyramid">
+      <div class="card-media">
+        <video id="vid-pyramid" loop muted playsinline preload="none">
+          <source src="videos/moving-pyramid.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-pyramid">
+          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="240" height="270" fill="#0d1a2e"/>
+            <polygon points="120,60 20,210 220,210" fill="#d4a853" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 120 135" to="360 120 135" dur="6s" repeatCount="indefinite"/>
+            </polygon>
+            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">moving pyramid</text>
+          </svg>
+        </div>
       </div>
-      <div class="work-card-tag">MV</div>
-      <div class="work-card-overlay">
-        <h3>Lunar Drift</h3>
-        <p>Music video · 3 min</p>
+      <div class="card-info">
+        <div class="card-tag">Motion · 3D Feel</div>
+        <div class="card-title">Moving Pyramid</div>
+        <div class="card-desc">Geometric motion study exploring rotation, depth, and spatial awareness in a flat 2D plane.</div>
+        <div class="card-tool">After Effects</div>
       </div>
     </div>
+
+    <!-- Card 4 -->
+    <div class="project-card reveal" style="transition-delay:0.2s" id="card-flowers">
+      <div class="card-media">
+        <video id="vid-flowers" loop muted playsinline preload="none">
+          <source src="videos/blooming-flowers.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-flowers">
+          <svg viewBox="0 0 480 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="480" height="270" fill="#1a0a0a"/>
+            <g opacity="0.8">
+              <circle cx="160" cy="160" r="30" fill="#b85c38" opacity="0.6"><animate attributeName="r" values="0;30;30" dur="2s" begin="0s" fill="freeze" repeatCount="1"/></circle>
+              <circle cx="160" cy="130" r="20" fill="#d4a853" opacity="0.7"><animate attributeName="r" values="0;20;20" dur="2s" begin="0.3s" fill="freeze" repeatCount="1"/></circle>
+              <circle cx="240" cy="150" r="35" fill="#b85c38" opacity="0.5"><animate attributeName="r" values="0;35;35" dur="2.5s" begin="0.5s" fill="freeze" repeatCount="1"/></circle>
+              <circle cx="320" cy="160" r="28" fill="#d4a853" opacity="0.6"><animate attributeName="r" values="0;28;28" dur="2s" begin="0.8s" fill="freeze" repeatCount="1"/></circle>
+            </g>
+            <text x="240" y="265" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Cormorant Garamond',serif" font-size="13" letter-spacing="4" font-style="italic">blooming flowers</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Nature · Organic Motion</div>
+        <div class="card-title">Blooming Flowers</div>
+        <div class="card-desc">An organic animation capturing the delicate, rhythmic unfurling of petals — nature's own easing curves.</div>
+        <div class="card-tool">After Effects</div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="project-card reveal" style="transition-delay:0.25s" id="card-duik">
+      <div class="card-media">
+        <video id="vid-duik" loop muted playsinline preload="none">
+          <source src="videos/duik-angela.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-duik">
+          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="240" height="270" fill="#2a1f3d"/>
+            <circle cx="120" cy="80" r="22" fill="#9b7fc7" opacity="0.8"/>
+            <rect x="105" y="103" width="30" height="50" rx="4" fill="#7b5ea7" opacity="0.7"/>
+            <rect x="80" y="108" width="24" height="8" rx="3" fill="#7b5ea7" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 92 108" to="30 92 108" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <rect x="136" y="108" width="24" height="8" rx="3" fill="#7b5ea7" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 148 108" to="-30 148 108" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <rect x="100" y="153" width="16" height="40" rx="3" fill="#6a4e9a" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 108 153" to="15 108 153" dur="1s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <rect x="124" y="153" width="16" height="40" rx="3" fill="#6a4e9a" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 132 153" to="-15 132 153" dur="1s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">duik angela</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Character · Rigging</div>
+        <div class="card-title">Exploring Duik Angela</div>
+        <div class="card-desc">Character rigging and walk cycle exploration using Duik Angela — bringing a jointed figure to fluid, natural life.</div>
+        <div class="card-tool">After Effects · Duik</div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- VIDEO UPLOAD SECTION -->
+<div class="upload-section reveal">
+  <h3>Add Your Videos</h3>
+  <p>Upload your animation files below — they'll play directly in the project cards above. Supported: MP4, WebM, MOV.</p>
+  <div class="upload-grid" id="uploadGrid">
+    <label class="upload-slot" id="slot-daynight">
+      <input type="file" accept="video/*" data-target="vid-daynight" data-ph="ph-daynight" data-slot="slot-daynight">
+      <div>📁 Upload</div>
+      <div class="slot-name">Day to Night</div>
+    </label>
+    <label class="upload-slot" id="slot-ball">
+      <input type="file" accept="video/*" data-target="vid-ball" data-ph="ph-ball" data-slot="slot-ball">
+      <div>📁 Upload</div>
+      <div class="slot-name">Bouncing Ball</div>
+    </label>
+    <label class="upload-slot" id="slot-pyramid">
+      <input type="file" accept="video/*" data-target="vid-pyramid" data-ph="ph-pyramid" data-slot="slot-pyramid">
+      <div>📁 Upload</div>
+      <div class="slot-name">Moving Pyramid</div>
+    </label>
+    <label class="upload-slot" id="slot-flowers">
+      <input type="file" accept="video/*" data-target="vid-flowers" data-ph="ph-flowers" data-slot="slot-flowers">
+      <div>📁 Upload</div>
+      <div class="slot-name">Blooming Flowers</div>
+    </label>
+    <label class="upload-slot" id="slot-duik">
+      <input type="file" accept="video/*" data-target="vid-duik" data-ph="ph-duik" data-slot="slot-duik">
+      <div>📁 Upload</div>
+      <div class="slot-name">Duik Angela</div>
+    </label>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--muted);">💡 <strong>Tip:</strong> For your live GitHub site, place video files in a <code>videos/</code> folder next to your index.html and they'll load automatically.</p>
+</div>
 
 <!-- ABOUT -->
 <section class="about" id="about">
   <div class="reveal">
-    <div class="section-label" style="color:rgba(245,240,232,0.4)">About Me</div>
-    <h2>Passion for <em>motion</em>, obsession with craft.</h2>
-    <p>I'm a 2D animator with a love for expressive character work, world-building, and storytelling through movement. Every frame is an opportunity to make something feel alive.</p>
-    <p>From indie short films to commercial spots, I bring the same energy and care to every project — whether it's a 30-second ad or a 10-minute film.</p>
-    <div class="skills-list">
-      <span class="skill-tag">Character Animation</span>
-      <span class="skill-tag">Frame-by-Frame</span>
-      <span class="skill-tag">Rigging</span>
-      <span class="skill-tag">Toon Boom</span>
-      <span class="skill-tag">After Effects</span>
-      <span class="skill-tag">Storyboarding</span>
-      <span class="skill-tag">Motion Graphics</span>
+    <div class="section-label">About Me</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem">Storyteller.<br/><em>Frame chaser.</em><br/>Collaborator.</h2>
+    <p>I'm Umaima Saeed Qazi — a 2D animator and motion designer trained at Hyper Island, where I learned to blend creative instinct with professional craft.</p>
+    <p>I work across character animation, motion graphics, and organic storytelling. Whether it's a bouncing ball or a full character rig, I care about the feeling every frame creates.</p>
+    <p>Currently open to full-time roles, internships, freelance projects, and studio collaborations. Let's make something worth watching.</p>
+    <div class="tools-row">
+      <span class="tool-chip">After Effects</span>
+      <span class="tool-chip">Adobe Illustrator</span>
+      <span class="tool-chip">Procreate</span>
+      <span class="tool-chip">Duik Angela</span>
+      <span class="tool-chip">Storyboarding</span>
+      <span class="tool-chip">Character Rigging</span>
     </div>
   </div>
-  <div class="about-visual reveal" style="transition-delay:0.2s">
-    <svg viewBox="0 0 320 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <g id="spiral-anim">
-        <path d="M160 160 Q220 100 160 60 Q100 20 60 80 Q20 140 80 180 Q140 220 200 180 Q260 140 240 80" stroke="#c4572a" stroke-width="1.5" fill="none" opacity="0.6">
-          <animate attributeName="stroke-dasharray" from="0 1000" to="1000 0" dur="3s" repeatCount="indefinite"/>
-        </path>
-        <path d="M160 160 Q100 220 140 260 Q180 300 230 260 Q280 220 260 160 Q240 100 180 90" stroke="#d4a843" stroke-width="1" fill="none" opacity="0.5">
-          <animate attributeName="stroke-dasharray" from="0 1000" to="1000 0" dur="4s" begin="0.5s" repeatCount="indefinite"/>
-        </path>
-        <path d="M160 160 Q130 130 100 140 Q70 150 70 180 Q70 210 100 220 Q130 230 150 210" stroke="rgba(245,240,232,0.4)" stroke-width="1" fill="none">
-          <animate attributeName="stroke-dasharray" from="0 500" to="500 0" dur="2.5s" begin="1s" repeatCount="indefinite"/>
-        </path>
-        <circle cx="160" cy="160" r="4" fill="#c4572a">
-          <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
-        </circle>
-        <text x="160" y="290" text-anchor="middle" fill="rgba(245,240,232,0.3)" font-family="'Playfair Display',serif" font-style="italic" font-size="13">in motion</text>
-      </g>
-    </svg>
+  <div class="about-right reveal" style="transition-delay:0.2s">
+    <div class="about-stat-stack">
+      <div class="about-stat">
+        <div class="about-stat-num">5+</div>
+        <div class="about-stat-label">Completed Animation Projects</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">3</div>
+        <div class="about-stat-label">Core Creative Tools</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">∞</div>
+        <div class="about-stat-label">Frames of curiosity</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
-  <div class="section-label reveal">Let's Work Together</div>
-  <h2 class="reveal">Got a <em>project</em> in mind?</h2>
-  <p class="reveal">I'm available for freelance animation, short films, and commercial work.</p>
-  <a href="mailto:hello@yourname.com" class="contact-email reveal">hello@yourname.com</a>
+  <div class="section-label reveal">Get In Touch</div>
+  <h2 class="reveal">Have a project<br/>in <em>mind?</em></h2>
+  <p class="reveal">Available for full-time roles, freelance work, internships &amp; studio collaborations.</p>
+  <a href="mailto:umaima.qazi@hyperisland.se" class="contact-email reveal">umaima.qazi@hyperisland.se</a>
+  <div class="social-row reveal">
+    <a href="https://www.instagram.com/umaimahqazi/" target="_blank" class="social-link">Instagram</a>
+    <a href="https://www.linkedin.com/in/umaimaqazi/" target="_blank" class="social-link">LinkedIn</a>
+  </div>
 </section>
 
 <footer>
-  <div>© 2026 Your Name — 2D Animator</div>
-  <div>Stockholm, SE</div>
+  <div>© 2026 Umaima Saeed Qazi — UMINO</div>
+  <div>2D Animator · Hyper Island</div>
 </footer>
 
 <script>
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
+// custom cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('a,button,.project-card,.upload-slot').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover');});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover');});
+});
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-const lines = [];
-const NUM_LINES = 8;
-
-function randomLine() {
-  const startX = Math.random() * window.innerWidth;
-  const startY = Math.random() * window.innerHeight;
-  const angle = Math.random() * Math.PI * 2;
-  const speed = 0.4 + Math.random() * 0.5;
-  const curl = (Math.random() - 0.5) * 0.015;
-  const maxLen = 300 + Math.random() * 400;
-  return {
-    x: startX, y: startY,
-    vx: Math.cos(angle) * speed,
-    vy: Math.sin(angle) * speed,
-    curl, maxLen,
-    points: [[startX, startY]],
-    age: 0,
-    hue: Math.random() > 0.5 ? '#c4572a' : '#1a1210',
-    width: 0.5 + Math.random() * 1.2,
-    done: false
+// bg canvas — flowing brush lines
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const lines=[];
+for(let i=0;i<12;i++) lines.push(newLine(true));
+function newLine(rand){
+  const a=Math.random()*Math.PI*2,sp=0.3+Math.random()*0.5;
+  return{
+    x:rand?Math.random()*window.innerWidth:Math.random()<0.5?0:window.innerWidth,
+    y:rand?Math.random()*window.innerHeight:Math.random()*window.innerHeight,
+    vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
+    curl:(Math.random()-0.5)*0.012,
+    pts:[],age:0,maxAge:400+Math.random()*300,
+    w:0.4+Math.random()*0.8
   };
 }
-
-for (let i = 0; i < NUM_LINES; i++) {
-  const l = randomLine();
-  l.age = Math.random() * l.maxLen;
-  lines.push(l);
-}
-
-let spirals = [];
-function addSpiral() {
-  const cx = Math.random() * window.innerWidth;
-  const cy = Math.random() * window.innerHeight;
-  spirals.push({ cx, cy, t: 0, maxT: 8 * Math.PI, speed: 0.04 + Math.random() * 0.03 });
-}
-for (let i = 0; i < 3; i++) addSpiral();
-
-function drawLine(line) {
-  if (line.points.length < 2) return;
-  ctx.beginPath();
-  ctx.strokeStyle = line.hue;
-  ctx.lineWidth = line.width;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.moveTo(line.points[0][0], line.points[0][1]);
-  for (let i = 1; i < line.points.length; i++) {
-    ctx.lineTo(line.points[i][0], line.points[i][1]);
-  }
-  ctx.stroke();
-}
-
-function tick() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Draw spirals
-  for (let s of spirals) {
-    if (s.t > s.maxT) continue;
-    ctx.beginPath();
-    ctx.strokeStyle = '#c4572a';
-    ctx.lineWidth = 0.6;
-    let prevX = s.cx, prevY = s.cy;
-    const steps = Math.floor(s.t / 0.1);
-    for (let i = 0; i < steps; i++) {
-      const tt = i * 0.1;
-      const r = 4 + tt * 8;
-      const x = s.cx + Math.cos(tt) * r;
-      const y = s.cy + Math.sin(tt) * r;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    const a=Math.atan2(l.vy,l.vx)+l.curl,sp=Math.hypot(l.vx,l.vy);
+    l.vx=Math.cos(a)*sp;l.vy=Math.sin(a)*sp;
+    l.x+=l.vx;l.y+=l.vy;
+    l.pts.push([l.x,l.y]);
+    if(l.pts.length>120)l.pts.shift();
+    l.age++;
+    if(l.pts.length>1){
+      ctx.beginPath();
+      ctx.strokeStyle='#1c1b19';ctx.lineWidth=l.w;
+      ctx.lineCap='round';ctx.lineJoin='round';
+      ctx.moveTo(l.pts[0][0],l.pts[0][1]);
+      for(let p=1;p<l.pts.length;p++) ctx.lineTo(l.pts[p][0],l.pts[p][1]);
+      ctx.stroke();
     }
-    ctx.stroke();
-    s.t += s.speed;
-    if (s.t > s.maxT) {
-      const idx = spirals.indexOf(s);
-      spirals.splice(idx, 1, { cx: Math.random() * window.innerWidth, cy: Math.random() * window.innerHeight, t: 0, maxT: 8 * Math.PI, speed: 0.04 + Math.random() * 0.03 });
-    }
+    if(l.age>l.maxAge||l.x<-80||l.x>window.innerWidth+80||l.y<-80||l.y>window.innerHeight+80) lines[i]=newLine(false);
   }
-
-  // Draw brush lines
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i];
-    if (!l.done) {
-      const angle = Math.atan2(l.vy, l.vx) + l.curl;
-      const speed = Math.sqrt(l.vx * l.vx + l.vy * l.vy);
-      l.vx = Math.cos(angle) * speed;
-      l.vy = Math.sin(angle) * speed;
-      const nx = l.x + l.vx;
-      const ny = l.y + l.vy;
-      l.points.push([nx, nx !== l.x ? ny : l.y]);
-      l.points[l.points.length - 1] = [nx, ny];
-      l.x = nx; l.y = ny;
-      l.age++;
-      if (l.age > l.maxLen) l.done = true;
-      if (l.x < -50 || l.x > window.innerWidth + 50 || l.y < -50 || l.y > window.innerHeight + 50) l.done = true;
-    }
-    drawLine(l);
-    if (l.done) lines[i] = randomLine();
-  }
-
   requestAnimationFrame(tick);
 }
 tick();
 
-// Scroll reveal
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.15 });
-reveals.forEach(r => observer.observe(r));
+// scroll reveal
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+// hover play video
+document.querySelectorAll('.project-card').forEach(card=>{
+  const vid=card.querySelector('video');
+  if(!vid)return;
+  card.addEventListener('mouseenter',()=>vid.src&&vid.play());
+  card.addEventListener('mouseleave',()=>{vid.pause();vid.currentTime=0;});
+});
+
+// video upload
+document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
+  input.addEventListener('change',function(){
+    const file=this.files[0];if(!file)return;
+    const vid=document.getElementById(this.dataset.target);
+    const ph=document.getElementById(this.dataset.ph);
+    const slot=document.getElementById(this.dataset.slot);
+    const url=URL.createObjectURL(file);
+    vid.src=url;
+    vid.load();
+    if(ph)ph.style.display='none';
+    vid.style.display='block';
+    if(slot){slot.classList.add('loaded');slot.querySelector('div').textContent='✓ Loaded';}
+  });
+});
 </script>
 </body>
 </html>
