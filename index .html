@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UMINO — Umaima Saeed Qazi · 2D Animator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --white:#fafaf8;
+  --off:#f2f0eb;
+  --ink:#1c1b19;
+  --muted:#8a8780;
+  --accent:#b85c38;
+  --accent2:#d4a853;
+  --border:rgba(28,27,25,0.09);
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--white);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* custom cursor */
+.cursor{
+  position:fixed;width:8px;height:8px;
+  background:var(--ink);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,background 0.2s,width 0.2s,height 0.2s;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(28,27,25,0.3);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.15s ease;
+}
+.cursor.hover{width:14px;height:14px;background:var(--accent);}
+.cursor-ring.hover{width:48px;height:48px;border-color:var(--accent);opacity:0.5;}
+
+/* canvas */
+#bg{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;
+  opacity:0.07;
+}
+
+/* nav */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.4rem 4rem;
+  mix-blend-mode:multiply;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+}
+nav ul{list-style:none;display:flex;gap:2.5rem;}
+nav a:not(.logo){
+  text-decoration:none;
+  font-size:0.78rem;font-weight:400;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  transition:color 0.2s;
+}
+nav a:hover:not(.logo){color:var(--accent);}
+
+/* hero */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:0 4rem;
+  gap:4rem;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-size:0.72rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:1.8rem;
+  display:flex;align-items:center;gap:0.8rem;
+}
+.hero-eyebrow::before{
+  content:'';width:2.5rem;height:1px;
+  background:var(--accent);display:inline-block;
+}
+h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,7vw,6.5rem);
+  line-height:0.95;
+  font-weight:300;
+  color:var(--ink);
+  margin-bottom:2rem;
+}
+h1 em{font-style:italic;color:var(--accent);}
+.hero-desc{
+  font-size:1rem;font-weight:300;
+  color:var(--muted);line-height:1.8;
+  max-width:38ch;margin-bottom:2.5rem;
+}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn{
+  display:inline-block;padding:0.8rem 2rem;
+  font-size:0.75rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;border-radius:1px;
+  transition:all 0.2s;
+}
+.btn-dark{background:var(--ink);color:var(--white);}
+.btn-dark:hover{background:var(--accent);}
+.btn-outline{border:1px solid var(--ink);color:var(--ink);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+.hero-right{
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-graphic{
+  width:100%;max-width:400px;
+  aspect-ratio:1;
+  position:relative;
+}
+
+/* scroll indicator */
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:4rem;
+  display:flex;align-items:center;gap:0.75rem;
+  font-size:0.7rem;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--muted);
+  z-index:1;
+}
+.scroll-line{
+  width:2rem;height:1px;
+  background:var(--muted);
+  animation:scrollPulse 2s infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{transform:scaleX(1);opacity:0.5;}
+  50%{transform:scaleX(1.4);opacity:1;}
+}
+
+/* section base */
+section{position:relative;z-index:1;}
+.section-header{margin-bottom:3.5rem;}
+.section-label{
+  font-size:0.7rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:0.6rem;
+}
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,4vw,3.2rem);
+  font-weight:300;line-height:1.1;
+}
+.section-title em{font-style:italic;}
+
+/* work */
+.work{padding:6rem 4rem;}
+.work-header{
+  display:flex;justify-content:space-between;
+  align-items:flex-end;margin-bottom:3.5rem;flex-wrap:wrap;gap:1rem;
+}
+.project-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.project-card{
+  position:relative;background:var(--off);
+  border-radius:2px;overflow:hidden;
+  cursor:none;
+}
+.project-card:nth-child(1){grid-column:span 2;}
+.project-card:nth-child(4){grid-column:span 2;}
+
+.card-media{
+  width:100%;aspect-ratio:16/9;
+  overflow:hidden;position:relative;
+  background:var(--ink);
+}
+.card-media video{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  transition:transform 0.6s ease;
+}
+.project-card:hover .card-media video{transform:scale(1.04);}
+
+/* placeholder visual when no video */
+.card-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.card-info{padding:1.25rem 1.5rem 1.5rem;}
+.card-tag{
+  font-size:0.65rem;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:0.4rem;
+}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;font-weight:400;
+  margin-bottom:0.3rem;
+}
+.card-desc{
+  font-size:0.82rem;font-weight:300;
+  color:var(--muted);line-height:1.6;
+}
+.card-tool{
+  margin-top:0.75rem;
+  font-size:0.65rem;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--muted);
+  opacity:0.7;
+}
+
+/* upload zone */
+.upload-section{
+  padding:4rem;
+  border:1px dashed rgba(28,27,25,0.18);
+  border-radius:2px;
+  margin:0 4rem 4rem;
+  text-align:center;
+  background:var(--off);
+}
+.upload-section h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem;font-weight:300;
+  margin-bottom:0.5rem;
+}
+.upload-section p{
+  font-size:0.85rem;color:var(--muted);
+  font-weight:300;margin-bottom:1.5rem;
+}
+.upload-grid{
+  display:flex;flex-wrap:wrap;gap:1rem;
+  justify-content:center;margin-top:1.5rem;
+}
+.upload-slot{
+  width:160px;padding:1rem;
+  border:1px dashed rgba(28,27,25,0.2);
+  border-radius:2px;background:var(--white);
+  font-size:0.75rem;color:var(--muted);
+  cursor:pointer;transition:border-color 0.2s;
+}
+.upload-slot:hover{border-color:var(--accent);}
+.upload-slot input{display:none;}
+.upload-slot .slot-name{
+  margin-top:0.4rem;font-size:0.7rem;
+  color:var(--ink);font-weight:500;
+}
+.upload-slot.loaded{border-color:var(--accent);border-style:solid;}
+
+/* about */
+.about{
+  padding:7rem 4rem;
+  background:var(--ink);color:var(--white);
+  display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;
+}
+.about .section-label{color:rgba(255,255,255,0.35);}
+.about .section-title{color:var(--white);}
+.about .section-title em{color:var(--accent2);}
+.about p{
+  font-size:1rem;font-weight:300;
+  color:rgba(255,255,255,0.6);
+  line-height:1.85;margin-bottom:1rem;
+}
+.tools-row{
+  margin-top:2rem;
+  display:flex;flex-wrap:wrap;gap:0.5rem;
+}
+.tool-chip{
+  padding:0.4rem 1rem;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:100px;
+  font-size:0.72rem;letter-spacing:0.06em;
+  color:rgba(255,255,255,0.55);
+}
+.about-right{position:relative;}
+.about-stat-stack{display:flex;flex-direction:column;gap:1.5rem;}
+.about-stat{
+  padding:1.5rem;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:2px;
+}
+.about-stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;font-weight:300;
+  color:var(--accent2);line-height:1;
+  margin-bottom:0.25rem;
+}
+.about-stat-label{
+  font-size:0.75rem;letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+}
+
+/* contact */
+.contact{
+  padding:8rem 4rem;
+  text-align:center;
+}
+.contact h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,6vw,5rem);
+  font-weight:300;margin-bottom:1rem;
+  line-height:1.05;
+}
+.contact h2 em{font-style:italic;color:var(--accent);}
+.contact p{
+  font-size:0.95rem;color:var(--muted);
+  font-weight:300;margin-bottom:2.5rem;
+}
+.contact-email{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;color:var(--ink);
+  text-decoration:none;
+  border-bottom:1px solid var(--accent);
+  padding-bottom:2px;
+  transition:color 0.2s;
+}
+.contact-email:hover{color:var(--accent);}
+.social-row{
+  margin-top:2.5rem;
+  display:flex;gap:1.5rem;justify-content:center;
+}
+.social-link{
+  font-size:0.72rem;letter-spacing:0.14em;
+  text-transform:uppercase;
+  text-decoration:none;color:var(--muted);
+  transition:color 0.2s;
+}
+.social-link:hover{color:var(--accent);}
+
+/* footer */
+footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.72rem;color:var(--muted);
+  letter-spacing:0.06em;
+  flex-wrap:wrap;gap:1rem;
+  z-index:1;position:relative;
+}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* responsive */
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem;}
+  .hero{grid-template-columns:1fr;padding:7rem 1.5rem 3rem;gap:3rem;}
+  .hero-right{display:none;}
+  .work{padding:4rem 1.5rem;}
+  .project-grid{grid-template-columns:1fr;}
+  .project-card:nth-child(1),.project-card:nth-child(4){grid-column:span 1;}
+  .upload-section{margin:0 1.5rem 3rem;padding:2.5rem 1.5rem;}
+  .about{grid-template-columns:1fr;padding:4rem 1.5rem;gap:3rem;}
+  .contact{padding:5rem 1.5rem;}
+  footer{padding:1.5rem;}
+  .scroll-hint{left:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+<canvas id="bg"></canvas>
+
+<nav>
+  <a class="logo" href="#">Umino</a>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">2D Animator · Motion Designer</div>
+    <h1>Motion<br/>that <em>speaks</em><br/>for itself.</h1>
+    <p class="hero-desc">I'm Umaima — I bring ideas to life through expressive 2D animation, character movement, and storytelling. Fresh from Hyper Island, open to the world.</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn btn-dark">See My Work</a>
+      <a href="#contact" class="btn btn-outline">Let's Talk</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-graphic">
+      <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.12" stroke="#1c1b19" fill="none">
+          <circle cx="200" cy="200" r="160" stroke-width="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="40s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="200" r="120" stroke-width="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="-360 200 200" dur="28s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="200" r="80" stroke-width="0.5">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="18s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+        <!-- animated spirograph -->
+        <path fill="none" stroke="#b85c38" stroke-width="0.8" opacity="0.6">
+          <animate attributeName="d" dur="8s" repeatCount="indefinite"
+            values="M200,200 Q240,100 300,150 Q360,200 300,260 Q240,320 180,280 Q120,240 140,180 Q160,120 200,200;
+                    M200,200 Q260,80 320,160 Q380,240 300,300 Q220,360 160,300 Q100,240 120,160 Q140,80 200,200;
+                    M200,200 Q240,100 300,150 Q360,200 300,260 Q240,320 180,280 Q120,240 140,180 Q160,120 200,200"/>
+        </path>
+        <circle cx="200" cy="200" r="4" fill="#b85c38" opacity="0.8">
+          <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <!-- orbit dot -->
+        <circle r="3" fill="#d4a853" opacity="0.7">
+          <animateMotion dur="6s" repeatCount="indefinite" path="M0,0 a120,120 0 1,1 0.01,0"/>
+          <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-line"></span>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="work-header reveal">
+    <div class="section-header" style="margin-bottom:0">
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">Animations &amp; <em>Projects</em></h2>
+    </div>
+  </div>
+
+  <div class="project-grid">
+
+    <!-- Card 1 -->
+    <div class="project-card reveal" style="transition-delay:0.05s" id="card-daynight">
+      <div class="card-media">
+        <video id="vid-daynight" loop muted playsinline preload="none" poster="">
+          <source src="videos/day-night.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-daynight">
+          <svg viewBox="0 0 480 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a4a"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs>
+            <rect width="480" height="270" fill="url(#sky1)"/>
+            <ellipse cx="380" cy="60" rx="38" ry="38" fill="#f5c842" opacity="0.9"/>
+            <rect x="0" y="200" width="480" height="70" fill="#2d4a1e" opacity="0.85"/>
+            <ellipse cx="80" cy="200" rx="50" ry="35" fill="#1e3b14" opacity="0.7"/>
+            <ellipse cx="400" cy="195" rx="60" ry="40" fill="#1e3b14" opacity="0.6"/>
+            <text x="240" y="148" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="'Cormorant Garamond',serif" font-size="13" letter-spacing="4">day · night transition</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Environment · Loop</div>
+        <div class="card-title">Day to Night</div>
+        <div class="card-desc">A seamless looping scene capturing the magic hour — the sky shifts from warm golden light into a deep, star-lit night.</div>
+        <div class="card-tool">After Effects</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="project-card reveal" style="transition-delay:0.1s" id="card-ball">
+      <div class="card-media">
+        <video id="vid-ball" loop muted playsinline preload="none">
+          <source src="videos/bouncing-ball.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-ball">
+          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="240" height="270" fill="#1c1b19"/>
+            <ellipse cx="120" cy="248" rx="40" ry="6" fill="#333" opacity="0.7"/>
+            <circle cx="120" cy="80" r="38" fill="#b85c38" opacity="0.9">
+              <animate attributeName="cy" values="80;220;80" dur="1.2s" keyTimes="0;0.5;1" keySplines="0.5 0 1 1; 0 0 0.5 1" calcMode="spline" repeatCount="indefinite"/>
+            </circle>
+            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">bouncing ball</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Principles · Exercise</div>
+        <div class="card-title">Bouncing Ball</div>
+        <div class="card-desc">The classic animation foundation — squash, stretch, anticipation and follow-through, perfected.</div>
+        <div class="card-tool">After Effects</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="project-card reveal" style="transition-delay:0.15s" id="card-pyramid">
+      <div class="card-media">
+        <video id="vid-pyramid" loop muted playsinline preload="none">
+          <source src="videos/moving-pyramid.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-pyramid">
+          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="240" height="270" fill="#0d1a2e"/>
+            <polygon points="120,60 20,210 220,210" fill="#d4a853" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 120 135" to="360 120 135" dur="6s" repeatCount="indefinite"/>
+            </polygon>
+            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">moving pyramid</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Motion · 3D Feel</div>
+        <div class="card-title">Moving Pyramid</div>
+        <div class="card-desc">Geometric motion study exploring rotation, depth, and spatial awareness in a flat 2D plane.</div>
+        <div class="card-tool">After Effects</div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="project-card reveal" style="transition-delay:0.2s" id="card-flowers">
+      <div class="card-media">
+        <video id="vid-flowers" loop muted playsinline preload="none">
+          <source src="videos/blooming-flowers.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-flowers">
+          <svg viewBox="0 0 480 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="480" height="270" fill="#1a0a0a"/>
+            <g opacity="0.8">
+              <circle cx="160" cy="160" r="30" fill="#b85c38" opacity="0.6"><animate attributeName="r" values="0;30;30" dur="2s" begin="0s" fill="freeze" repeatCount="1"/></circle>
+              <circle cx="160" cy="130" r="20" fill="#d4a853" opacity="0.7"><animate attributeName="r" values="0;20;20" dur="2s" begin="0.3s" fill="freeze" repeatCount="1"/></circle>
+              <circle cx="240" cy="150" r="35" fill="#b85c38" opacity="0.5"><animate attributeName="r" values="0;35;35" dur="2.5s" begin="0.5s" fill="freeze" repeatCount="1"/></circle>
+              <circle cx="320" cy="160" r="28" fill="#d4a853" opacity="0.6"><animate attributeName="r" values="0;28;28" dur="2s" begin="0.8s" fill="freeze" repeatCount="1"/></circle>
+            </g>
+            <text x="240" y="265" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Cormorant Garamond',serif" font-size="13" letter-spacing="4" font-style="italic">blooming flowers</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Nature · Organic Motion</div>
+        <div class="card-title">Blooming Flowers</div>
+        <div class="card-desc">An organic animation capturing the delicate, rhythmic unfurling of petals — nature's own easing curves.</div>
+        <div class="card-tool">After Effects</div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="project-card reveal" style="transition-delay:0.25s" id="card-duik">
+      <div class="card-media">
+        <video id="vid-duik" loop muted playsinline preload="none">
+          <source src="videos/duik-angela.mp4" type="video/mp4">
+        </video>
+        <div class="card-placeholder" id="ph-duik">
+          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="240" height="270" fill="#2a1f3d"/>
+            <circle cx="120" cy="80" r="22" fill="#9b7fc7" opacity="0.8"/>
+            <rect x="105" y="103" width="30" height="50" rx="4" fill="#7b5ea7" opacity="0.7"/>
+            <rect x="80" y="108" width="24" height="8" rx="3" fill="#7b5ea7" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 92 108" to="30 92 108" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <rect x="136" y="108" width="24" height="8" rx="3" fill="#7b5ea7" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 148 108" to="-30 148 108" dur="1.5s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <rect x="100" y="153" width="16" height="40" rx="3" fill="#6a4e9a" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 108 153" to="15 108 153" dur="1s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <rect x="124" y="153" width="16" height="40" rx="3" fill="#6a4e9a" opacity="0.7">
+              <animateTransform attributeName="transform" type="rotate" from="0 132 153" to="-15 132 153" dur="1s" repeatCount="indefinite" additive="sum"/>
+            </rect>
+            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">duik angela</text>
+          </svg>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Character · Rigging</div>
+        <div class="card-title">Exploring Duik Angela</div>
+        <div class="card-desc">Character rigging and walk cycle exploration using Duik Angela — bringing a jointed figure to fluid, natural life.</div>
+        <div class="card-tool">After Effects · Duik</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VIDEO UPLOAD SECTION -->
+<div class="upload-section reveal">
+  <h3>Add Your Videos</h3>
+  <p>Upload your animation files below — they'll play directly in the project cards above. Supported: MP4, WebM, MOV.</p>
+  <div class="upload-grid" id="uploadGrid">
+    <label class="upload-slot" id="slot-daynight">
+      <input type="file" accept="video/*" data-target="vid-daynight" data-ph="ph-daynight" data-slot="slot-daynight">
+      <div>📁 Upload</div>
+      <div class="slot-name">Day to Night</div>
+    </label>
+    <label class="upload-slot" id="slot-ball">
+      <input type="file" accept="video/*" data-target="vid-ball" data-ph="ph-ball" data-slot="slot-ball">
+      <div>📁 Upload</div>
+      <div class="slot-name">Bouncing Ball</div>
+    </label>
+    <label class="upload-slot" id="slot-pyramid">
+      <input type="file" accept="video/*" data-target="vid-pyramid" data-ph="ph-pyramid" data-slot="slot-pyramid">
+      <div>📁 Upload</div>
+      <div class="slot-name">Moving Pyramid</div>
+    </label>
+    <label class="upload-slot" id="slot-flowers">
+      <input type="file" accept="video/*" data-target="vid-flowers" data-ph="ph-flowers" data-slot="slot-flowers">
+      <div>📁 Upload</div>
+      <div class="slot-name">Blooming Flowers</div>
+    </label>
+    <label class="upload-slot" id="slot-duik">
+      <input type="file" accept="video/*" data-target="vid-duik" data-ph="ph-duik" data-slot="slot-duik">
+      <div>📁 Upload</div>
+      <div class="slot-name">Duik Angela</div>
+    </label>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--muted);">💡 <strong>Tip:</strong> For your live GitHub site, place video files in a <code>videos/</code> folder next to your index.html and they'll load automatically.</p>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="reveal">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem">Storyteller.<br/><em>Frame chaser.</em><br/>Collaborator.</h2>
+    <p>I'm Umaima Saeed Qazi — a 2D animator and motion designer trained at Hyper Island, where I learned to blend creative instinct with professional craft.</p>
+    <p>I work across character animation, motion graphics, and organic storytelling. Whether it's a bouncing ball or a full character rig, I care about the feeling every frame creates.</p>
+    <p>Currently open to full-time roles, internships, freelance projects, and studio collaborations. Let's make something worth watching.</p>
+    <div class="tools-row">
+      <span class="tool-chip">After Effects</span>
+      <span class="tool-chip">Adobe Illustrator</span>
+      <span class="tool-chip">Procreate</span>
+      <span class="tool-chip">Duik Angela</span>
+      <span class="tool-chip">Storyboarding</span>
+      <span class="tool-chip">Character Rigging</span>
+    </div>
+  </div>
+  <div class="about-right reveal" style="transition-delay:0.2s">
+    <div class="about-stat-stack">
+      <div class="about-stat">
+        <div class="about-stat-num">5+</div>
+        <div class="about-stat-label">Completed Animation Projects</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">3</div>
+        <div class="about-stat-label">Core Creative Tools</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">∞</div>
+        <div class="about-stat-label">Frames of curiosity</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label reveal">Get In Touch</div>
+  <h2 class="reveal">Have a project<br/>in <em>mind?</em></h2>
+  <p class="reveal">Available for full-time roles, freelance work, internships &amp; studio collaborations.</p>
+  <a href="mailto:umaima.qazi@hyperisland.se" class="contact-email reveal">umaima.qazi@hyperisland.se</a>
+  <div class="social-row reveal">
+    <a href="https://www.instagram.com/umaimahqazi/" target="_blank" class="social-link">Instagram</a>
+    <a href="https://www.linkedin.com/in/umaimaqazi/" target="_blank" class="social-link">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Umaima Saeed Qazi — UMINO</div>
+  <div>2D Animator · Hyper Island</div>
+</footer>
+
+<script>
+// custom cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('a,button,.project-card,.upload-slot').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover');});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover');});
+});
+
+// bg canvas — flowing brush lines
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const lines=[];
+for(let i=0;i<12;i++) lines.push(newLine(true));
+function newLine(rand){
+  const a=Math.random()*Math.PI*2,sp=0.3+Math.random()*0.5;
+  return{
+    x:rand?Math.random()*window.innerWidth:Math.random()<0.5?0:window.innerWidth,
+    y:rand?Math.random()*window.innerHeight:Math.random()*window.innerHeight,
+    vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
+    curl:(Math.random()-0.5)*0.012,
+    pts:[],age:0,maxAge:400+Math.random()*300,
+    w:0.4+Math.random()*0.8
+  };
+}
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    const a=Math.atan2(l.vy,l.vx)+l.curl,sp=Math.hypot(l.vx,l.vy);
+    l.vx=Math.cos(a)*sp;l.vy=Math.sin(a)*sp;
+    l.x+=l.vx;l.y+=l.vy;
+    l.pts.push([l.x,l.y]);
+    if(l.pts.length>120)l.pts.shift();
+    l.age++;
+    if(l.pts.length>1){
+      ctx.beginPath();
+      ctx.strokeStyle='#1c1b19';ctx.lineWidth=l.w;
+      ctx.lineCap='round';ctx.lineJoin='round';
+      ctx.moveTo(l.pts[0][0],l.pts[0][1]);
+      for(let p=1;p<l.pts.length;p++) ctx.lineTo(l.pts[p][0],l.pts[p][1]);
+      ctx.stroke();
+    }
+    if(l.age>l.maxAge||l.x<-80||l.x>window.innerWidth+80||l.y<-80||l.y>window.innerHeight+80) lines[i]=newLine(false);
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+// scroll reveal
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+// hover play video
+document.querySelectorAll('.project-card').forEach(card=>{
+  const vid=card.querySelector('video');
+  if(!vid)return;
+  card.addEventListener('mouseenter',()=>vid.src&&vid.play());
+  card.addEventListener('mouseleave',()=>{vid.pause();vid.currentTime=0;});
+});
+
+// video upload
+document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
+  input.addEventListener('change',function(){
+    const file=this.files[0];if(!file)return;
+    const vid=document.getElementById(this.dataset.target);
+    const ph=document.getElementById(this.dataset.ph);
+    const slot=document.getElementById(this.dataset.slot);
+    const url=URL.createObjectURL(file);
+    vid.src=url;
+    vid.load();
+    if(ph)ph.style.display='none';
+    vid.style.display='block';
+    if(slot){slot.classList.add('loaded');slot.querySelector('div').textContent='✓ Loaded';}
+  });
+});
+</script>
+</body>
+</html>
