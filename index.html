@@ -190,13 +190,13 @@ section{position:relative;z-index:1;}
 .project-card:nth-child(4){grid-column:span 2;}
 
 .card-media{
-  width:100%;aspect-ratio:16/9;
-  overflow:hidden;position:relative;
-  background:var(--ink);
+  width:100%;
+  position:relative;
+  background:var(--off);
 }
 .card-media video{
-  width:100%;height:100%;
-  object-fit:cover;display:block;
+  width:100%;height:auto;
+  display:block;
   transition:transform 0.6s ease;
 }
 .project-card:hover .card-media video{transform:scale(1.04);}
@@ -454,23 +454,8 @@ footer{
   <div class="project-grid">
 
     <!-- Card 1 -->
-    <div class="project-card reveal" style="transition-delay:0.05s" id="card-daynight">
-      <div class="card-media">
-        <video id="vid-daynight" loop muted playsinline preload="none" poster="">
-          <source src="videos/day-night.mp4" type="video/mp4">
-        </video>
-        <div class="card-placeholder" id="ph-daynight">
-          <svg viewBox="0 0 480 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a4a"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs>
-            <rect width="480" height="270" fill="url(#sky1)"/>
-            <ellipse cx="380" cy="60" rx="38" ry="38" fill="#f5c842" opacity="0.9"/>
-            <rect x="0" y="200" width="480" height="70" fill="#2d4a1e" opacity="0.85"/>
-            <ellipse cx="80" cy="200" rx="50" ry="35" fill="#1e3b14" opacity="0.7"/>
-            <ellipse cx="400" cy="195" rx="60" ry="40" fill="#1e3b14" opacity="0.6"/>
-            <text x="240" y="148" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="'Cormorant Garamond',serif" font-size="13" letter-spacing="4">day · night transition</text>
-          </svg>
-        </div>
-      </div>
+    <div class="project-card reveal" style="transition-delay:0.05s">
+      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
       <div class="card-info">
         <div class="card-tag">Environment · Loop</div>
         <div class="card-title">Day to Night</div>
@@ -480,22 +465,8 @@ footer{
     </div>
 
     <!-- Card 2 -->
-    <div class="project-card reveal" style="transition-delay:0.1s" id="card-ball">
-      <div class="card-media">
-        <video id="vid-ball" loop muted playsinline preload="none">
-          <source src="videos/bouncing-ball.mp4" type="video/mp4">
-        </video>
-        <div class="card-placeholder" id="ph-ball">
-          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <rect width="240" height="270" fill="#1c1b19"/>
-            <ellipse cx="120" cy="248" rx="40" ry="6" fill="#333" opacity="0.7"/>
-            <circle cx="120" cy="80" r="38" fill="#b85c38" opacity="0.9">
-              <animate attributeName="cy" values="80;220;80" dur="1.2s" keyTimes="0;0.5;1" keySplines="0.5 0 1 1; 0 0 0.5 1" calcMode="spline" repeatCount="indefinite"/>
-            </circle>
-            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">bouncing ball</text>
-          </svg>
-        </div>
-      </div>
+    <div class="project-card reveal" style="transition-delay:0.1s">
+      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
       <div class="card-info">
         <div class="card-tag">Principles · Exercise</div>
         <div class="card-title">Bouncing Ball</div>
@@ -505,21 +476,8 @@ footer{
     </div>
 
     <!-- Card 3 -->
-    <div class="project-card reveal" style="transition-delay:0.15s" id="card-pyramid">
-      <div class="card-media">
-        <video id="vid-pyramid" loop muted playsinline preload="none">
-          <source src="videos/moving-pyramid.mp4" type="video/mp4">
-        </video>
-        <div class="card-placeholder" id="ph-pyramid">
-          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <rect width="240" height="270" fill="#0d1a2e"/>
-            <polygon points="120,60 20,210 220,210" fill="#d4a853" opacity="0.7">
-              <animateTransform attributeName="transform" type="rotate" from="0 120 135" to="360 120 135" dur="6s" repeatCount="indefinite"/>
-            </polygon>
-            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">moving pyramid</text>
-          </svg>
-        </div>
-      </div>
+    <div class="project-card reveal" style="transition-delay:0.15s">
+      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
       <div class="card-info">
         <div class="card-tag">Motion · 3D Feel</div>
         <div class="card-title">Moving Pyramid</div>
@@ -529,24 +487,8 @@ footer{
     </div>
 
     <!-- Card 4 -->
-    <div class="project-card reveal" style="transition-delay:0.2s" id="card-flowers">
-      <div class="card-media">
-        <video id="vid-flowers" loop muted playsinline preload="none">
-          <source src="videos/blooming-flowers.mp4" type="video/mp4">
-        </video>
-        <div class="card-placeholder" id="ph-flowers">
-          <svg viewBox="0 0 480 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <rect width="480" height="270" fill="#1a0a0a"/>
-            <g opacity="0.8">
-              <circle cx="160" cy="160" r="30" fill="#b85c38" opacity="0.6"><animate attributeName="r" values="0;30;30" dur="2s" begin="0s" fill="freeze" repeatCount="1"/></circle>
-              <circle cx="160" cy="130" r="20" fill="#d4a853" opacity="0.7"><animate attributeName="r" values="0;20;20" dur="2s" begin="0.3s" fill="freeze" repeatCount="1"/></circle>
-              <circle cx="240" cy="150" r="35" fill="#b85c38" opacity="0.5"><animate attributeName="r" values="0;35;35" dur="2.5s" begin="0.5s" fill="freeze" repeatCount="1"/></circle>
-              <circle cx="320" cy="160" r="28" fill="#d4a853" opacity="0.6"><animate attributeName="r" values="0;28;28" dur="2s" begin="0.8s" fill="freeze" repeatCount="1"/></circle>
-            </g>
-            <text x="240" y="265" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Cormorant Garamond',serif" font-size="13" letter-spacing="4" font-style="italic">blooming flowers</text>
-          </svg>
-        </div>
-      </div>
+    <div class="project-card reveal" style="transition-delay:0.2s">
+      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
       <div class="card-info">
         <div class="card-tag">Nature · Organic Motion</div>
         <div class="card-title">Blooming Flowers</div>
@@ -556,32 +498,8 @@ footer{
     </div>
 
     <!-- Card 5 -->
-    <div class="project-card reveal" style="transition-delay:0.25s" id="card-duik">
-      <div class="card-media">
-        <video id="vid-duik" loop muted playsinline preload="none">
-          <source src="videos/duik-angela.mp4" type="video/mp4">
-        </video>
-        <div class="card-placeholder" id="ph-duik">
-          <svg viewBox="0 0 240 270" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <rect width="240" height="270" fill="#2a1f3d"/>
-            <circle cx="120" cy="80" r="22" fill="#9b7fc7" opacity="0.8"/>
-            <rect x="105" y="103" width="30" height="50" rx="4" fill="#7b5ea7" opacity="0.7"/>
-            <rect x="80" y="108" width="24" height="8" rx="3" fill="#7b5ea7" opacity="0.7">
-              <animateTransform attributeName="transform" type="rotate" from="0 92 108" to="30 92 108" dur="1.5s" repeatCount="indefinite" additive="sum"/>
-            </rect>
-            <rect x="136" y="108" width="24" height="8" rx="3" fill="#7b5ea7" opacity="0.7">
-              <animateTransform attributeName="transform" type="rotate" from="0 148 108" to="-30 148 108" dur="1.5s" repeatCount="indefinite" additive="sum"/>
-            </rect>
-            <rect x="100" y="153" width="16" height="40" rx="3" fill="#6a4e9a" opacity="0.7">
-              <animateTransform attributeName="transform" type="rotate" from="0 108 153" to="15 108 153" dur="1s" repeatCount="indefinite" additive="sum"/>
-            </rect>
-            <rect x="124" y="153" width="16" height="40" rx="3" fill="#6a4e9a" opacity="0.7">
-              <animateTransform attributeName="transform" type="rotate" from="0 132 153" to="-15 132 153" dur="1s" repeatCount="indefinite" additive="sum"/>
-            </rect>
-            <text x="120" y="265" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-family="'Outfit',sans-serif" font-size="10" letter-spacing="3">duik angela</text>
-          </svg>
-        </div>
-      </div>
+    <div class="project-card reveal" style="transition-delay:0.25s">
+      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
       <div class="card-info">
         <div class="card-tag">Character · Rigging</div>
         <div class="card-title">Exploring Duik Angela</div>
@@ -590,42 +508,45 @@ footer{
       </div>
     </div>
 
+    <!-- Card 6 — Cat Animation -->
+    <div class="project-card reveal" style="transition-delay:0.3s">
+      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-info">
+        <div class="card-tag">Character · Loop</div>
+        <div class="card-title">Wiggling Cat</div>
+        <div class="card-desc">A charming looping character animation — a playful cat with a life of its own, one wiggle at a time.</div>
+        <div class="card-tool">After Effects</div>
+      </div>
+    </div>
+
+    <!-- Card 7 — Elastic Poster -->
+    <div class="project-card reveal" style="transition-delay:0.35s">
+      <div class="card-media" style="min-height:200px;background:var(--off);">
+        <img src="posters/elasticgif.gif" alt="Elastic — Snap Athletic" style="width:100%;height:auto;display:block;"/>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Motion Poster · GIF</div>
+        <div class="card-title">Elastic — Snap Athletic</div>
+        <div class="card-desc">A high-energy animated poster for a gym brand — bold typography, gritty textures, and kinetic motion that hits as hard as the workout.</div>
+        <div class="card-tool">After Effects · Illustrator</div>
+      </div>
+    </div>
+
+    <!-- Card 8 — Glad Sommar Poster -->
+    <div class="project-card reveal" style="transition-delay:0.4s">
+      <div class="card-media" style="min-height:200px;background:var(--off);">
+        <img src="posters/GLAD_SOMMAR.gif" alt="Glad Sommar" style="width:100%;height:auto;display:block;"/>
+      </div>
+      <div class="card-info">
+        <div class="card-tag">Motion Poster · GIF</div>
+        <div class="card-title">Glad Sommar</div>
+        <div class="card-desc">A warm and playful Swedish summer poster — "Happy Summer" brought to life with cheerful motion and a light, seasonal energy.</div>
+        <div class="card-tool">After Effects · Illustrator</div>
+      </div>
+    </div>
+
   </div>
 </section>
-
-<!-- VIDEO UPLOAD SECTION -->
-<div class="upload-section reveal">
-  <h3>Add Your Videos</h3>
-  <p>Upload your animation files below — they'll play directly in the project cards above. Supported: MP4, WebM, MOV.</p>
-  <div class="upload-grid" id="uploadGrid">
-    <label class="upload-slot" id="slot-daynight">
-      <input type="file" accept="video/*" data-target="vid-daynight" data-ph="ph-daynight" data-slot="slot-daynight">
-      <div>📁 Upload</div>
-      <div class="slot-name">Day to Night</div>
-    </label>
-    <label class="upload-slot" id="slot-ball">
-      <input type="file" accept="video/*" data-target="vid-ball" data-ph="ph-ball" data-slot="slot-ball">
-      <div>📁 Upload</div>
-      <div class="slot-name">Bouncing Ball</div>
-    </label>
-    <label class="upload-slot" id="slot-pyramid">
-      <input type="file" accept="video/*" data-target="vid-pyramid" data-ph="ph-pyramid" data-slot="slot-pyramid">
-      <div>📁 Upload</div>
-      <div class="slot-name">Moving Pyramid</div>
-    </label>
-    <label class="upload-slot" id="slot-flowers">
-      <input type="file" accept="video/*" data-target="vid-flowers" data-ph="ph-flowers" data-slot="slot-flowers">
-      <div>📁 Upload</div>
-      <div class="slot-name">Blooming Flowers</div>
-    </label>
-    <label class="upload-slot" id="slot-duik">
-      <input type="file" accept="video/*" data-target="vid-duik" data-ph="ph-duik" data-slot="slot-duik">
-      <div>📁 Upload</div>
-      <div class="slot-name">Duik Angela</div>
-    </label>
-  </div>
-  <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--muted);">💡 <strong>Tip:</strong> For your live GitHub site, place video files in a <code>videos/</code> folder next to your index.html and they'll load automatically.</p>
-</div>
 
 <!-- ABOUT -->
 <section class="about" id="about">
@@ -639,9 +560,12 @@ footer{
       <span class="tool-chip">After Effects</span>
       <span class="tool-chip">Adobe Illustrator</span>
       <span class="tool-chip">Procreate</span>
-      <span class="tool-chip">Duik Angela</span>
       <span class="tool-chip">Storyboarding</span>
       <span class="tool-chip">Character Rigging</span>
+      <span class="tool-chip">Motion Graphics</span>
+    </div>
+    <div style="margin-top:2rem;">
+      <a href="cv/Umaima_Saeed_Qazi___CV.pdf" download class="btn btn-outline" style="display:inline-block;padding:0.8rem 2rem;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);text-decoration:none;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border-radius:1px;transition:all 0.2s;">Download CV</a>
     </div>
   </div>
   <div class="about-right reveal" style="transition-delay:0.2s">
@@ -658,6 +582,22 @@ footer{
         <div class="about-stat-num">∞</div>
         <div class="about-stat-label">Frames of curiosity</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- CV SECTION -->
+<section style="position:relative;z-index:1;padding:6rem 4rem;background:var(--off);" id="cv">
+  <div class="reveal" style="max-width:900px;margin:0 auto;">
+    <div class="section-label">My CV</div>
+    <h2 class="section-title" style="margin-bottom:2.5rem;">Qualifications &amp; <em>Experience</em></h2>
+    <div style="border:1px solid var(--border);border-radius:2px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.08);">
+      <iframe src="cv/Umaima_Saeed_Qazi___CV.pdf" width="100%" height="900px" style="display:block;border:none;" title="Umaima Saeed Qazi CV">
+        <p>Your browser does not support PDFs. <a href="cv/Umaima_Saeed_Qazi___CV.pdf" download>Download the CV here</a>.</p>
+      </iframe>
+    </div>
+    <div style="margin-top:1.5rem;text-align:center;">
+      <a href="cv/Umaima_Saeed_Qazi___CV.pdf" download class="btn btn-dark" style="display:inline-block;padding:0.8rem 2rem;background:var(--ink);color:var(--white);text-decoration:none;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border-radius:1px;transition:all 0.2s;">Download CV as PDF</a>
     </div>
   </div>
 </section>
@@ -740,7 +680,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 document.querySelectorAll('.project-card').forEach(card=>{
   const vid=card.querySelector('video');
   if(!vid)return;
-  card.addEventListener('mouseenter',()=>vid.src&&vid.play());
+  card.addEventListener('mouseenter',()=>{vid.play();});
   card.addEventListener('mouseleave',()=>{vid.pause();vid.currentTime=0;});
 });
 
