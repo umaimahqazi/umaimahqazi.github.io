@@ -1,3 +1,74 @@
+
+/
+Claude finished the response
+i am also having 2 The files doesn't give me a delete file option, it just gives me a view file option. So at the moment, uh, I'm... I am not able to delete the previous old videos.
+
+No worries! You don't need to delete them. Just upload the correctly named files alongside the old ones — GitHub will keep both and that's fine. The website will only use the correctly named ones.
+
+So just:
+
+Go to https://github.com/umaimahqazi/umaimahqazi.github.io/upload/main/videos
+Drag and drop all 6 correctly named videos
+Click Commit changes
+The old wrongly named files will just sit there doing nothing — they won't affect your website at all! 😊
+
+1783538100967_image.png
+I drag and drop videos, uh, in the, uh, video section. It's not uploading there.
+
+I can see you're still on the old commit view page — that's why it's not working.
+
+Go directly to this link to upload:
+
+https://github.com/umaimahqazi/umaimahqazi.github.io/upload/main/videos
+
+Just copy that link, paste it in your browser address bar and press Enter. That will take you directly to the upload page for the videos folder! 🎯
+
+I still can't see my videos on my website.
+
+Let's check what's in your videos folder right now. Go to this link and send me a screenshot:
+
+https://github.com/umaimahqazi/umaimahqazi.github.io/tree/main/videos
+
+I need to see the exact filenames that are uploaded so I can fix the code to match them! 📸
+
+1783538314101_image.png
+The correctly named files are all there now! I can see:
+
+✅ day-night.mp4
+✅ bouncing-ball.mp4
+✅ blooming-flowers.mp4
+✅ moving-pyramid.mp4
+✅ cat.mp4
+The videos ARE uploaded correctly. The issue is that your website code still has blank spaces — we never added the video tags back into the cards!
+
+Let me update the index.html now to add the videos back in:
+
+
+Edited a file, read a file
+Edited a file, read a file
+Done! Now go to:
+
+https://github.com/umaimahqazi/umaimahqazi.github.io/edit/main/index.html
+
+Ctrl + A → Delete → Ctrl + V (paste new code)
+Click Commit changes
+Then wait 2 minutes and your videos will show on the site! 🎉
+
+Also — I notice duik-angela.mp4 is not in your videos folder yet. Do you have that file? 😊
+
+
+Index
+Code · HTML 
+
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +95,7 @@ body{
   overflow-x:hidden;
   cursor:none;
 }
-
+ 
 /* custom cursor */
 .cursor{
   position:fixed;width:8px;height:8px;
@@ -42,7 +113,7 @@ body{
 }
 .cursor.hover{width:14px;height:14px;background:var(--accent);}
 .cursor-ring.hover{width:48px;height:48px;border-color:var(--accent);opacity:0.5;}
-
+ 
 /* canvas */
 #bg{
   position:fixed;top:0;left:0;
@@ -50,7 +121,7 @@ body{
   pointer-events:none;z-index:0;
   opacity:0.07;
 }
-
+ 
 /* nav */
 nav{
   position:fixed;top:0;left:0;right:0;
@@ -77,7 +148,7 @@ nav a:not(.logo){
   transition:color 0.2s;
 }
 nav a:hover:not(.logo){color:var(--accent);}
-
+ 
 /* hero */
 .hero{
   position:relative;z-index:1;
@@ -127,7 +198,7 @@ h1 em{font-style:italic;color:var(--accent);}
 .btn-dark:hover{background:var(--accent);}
 .btn-outline{border:1px solid var(--ink);color:var(--ink);}
 .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
-
+ 
 .hero-right{
   display:flex;align-items:center;justify-content:center;
 }
@@ -136,7 +207,7 @@ h1 em{font-style:italic;color:var(--accent);}
   aspect-ratio:1;
   position:relative;
 }
-
+ 
 /* scroll indicator */
 .scroll-hint{
   position:absolute;bottom:2.5rem;left:4rem;
@@ -154,7 +225,7 @@ h1 em{font-style:italic;color:var(--accent);}
   0%,100%{transform:scaleX(1);opacity:0.5;}
   50%{transform:scaleX(1.4);opacity:1;}
 }
-
+ 
 /* section base */
 section{position:relative;z-index:1;}
 .section-header{margin-bottom:3.5rem;}
@@ -169,7 +240,7 @@ section{position:relative;z-index:1;}
   font-weight:300;line-height:1.1;
 }
 .section-title em{font-style:italic;}
-
+ 
 /* work */
 .work{padding:6rem 4rem;}
 .work-header{
@@ -188,7 +259,7 @@ section{position:relative;z-index:1;}
 }
 .project-card:nth-child(1){grid-column:span 2;}
 .project-card:nth-child(4){grid-column:span 2;}
-
+ 
 .card-media{
   width:100%;
   position:relative;
@@ -200,13 +271,13 @@ section{position:relative;z-index:1;}
   transition:transform 0.6s ease;
 }
 .project-card:hover .card-media video{transform:scale(1.04);}
-
+ 
 /* placeholder visual when no video */
 .card-placeholder{
   width:100%;height:100%;
   display:flex;align-items:center;justify-content:center;
 }
-
+ 
 .card-info{padding:1.25rem 1.5rem 1.5rem;}
 .card-tag{
   font-size:0.65rem;letter-spacing:0.16em;
@@ -228,7 +299,7 @@ section{position:relative;z-index:1;}
   text-transform:uppercase;color:var(--muted);
   opacity:0.7;
 }
-
+ 
 /* upload zone */
 .upload-section{
   padding:4rem;
@@ -265,7 +336,7 @@ section{position:relative;z-index:1;}
   color:var(--ink);font-weight:500;
 }
 .upload-slot.loaded{border-color:var(--accent);border-style:solid;}
-
+ 
 /* about */
 .about{
   padding:7rem 4rem;
@@ -309,7 +380,7 @@ section{position:relative;z-index:1;}
   text-transform:uppercase;
   color:rgba(255,255,255,0.35);
 }
-
+ 
 /* contact */
 .contact{
   padding:8rem 4rem;
@@ -346,7 +417,7 @@ section{position:relative;z-index:1;}
   transition:color 0.2s;
 }
 .social-link:hover{color:var(--accent);}
-
+ 
 /* footer */
 footer{
   border-top:1px solid var(--border);
@@ -357,11 +428,11 @@ footer{
   flex-wrap:wrap;gap:1rem;
   z-index:1;position:relative;
 }
-
+ 
 /* reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.9s ease,transform 0.9s ease;}
 .reveal.visible{opacity:1;transform:none;}
-
+ 
 /* responsive */
 @media(max-width:900px){
   nav{padding:1.2rem 1.5rem;}
@@ -379,11 +450,11 @@ footer{
 </style>
 </head>
 <body>
-
+ 
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curRing"></div>
 <canvas id="bg"></canvas>
-
+ 
 <nav>
   <a class="logo" href="#">Umino</a>
   <ul>
@@ -392,7 +463,7 @@ footer{
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
-
+ 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
@@ -441,7 +512,7 @@ footer{
     Scroll to explore
   </div>
 </section>
-
+ 
 <!-- WORK -->
 <section class="work" id="work">
   <div class="work-header reveal">
@@ -450,12 +521,14 @@ footer{
       <h2 class="section-title">Animations &amp; <em>Projects</em></h2>
     </div>
   </div>
-
+ 
   <div class="project-grid">
-
+ 
     <!-- Card 1 -->
     <div class="project-card reveal" style="transition-delay:0.05s">
-      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-media">
+        <video src="videos/day-night.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+      </div>
       <div class="card-info">
         <div class="card-tag">Environment · Loop</div>
         <div class="card-title">Day to Night</div>
@@ -463,10 +536,12 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
-
+ 
     <!-- Card 2 -->
     <div class="project-card reveal" style="transition-delay:0.1s">
-      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-media">
+        <video src="videos/bouncing-ball.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+      </div>
       <div class="card-info">
         <div class="card-tag">Principles · Exercise</div>
         <div class="card-title">Bouncing Ball</div>
@@ -474,10 +549,12 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
-
+ 
     <!-- Card 3 -->
     <div class="project-card reveal" style="transition-delay:0.15s">
-      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-media">
+        <video src="videos/moving-pyramid.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+      </div>
       <div class="card-info">
         <div class="card-tag">Motion · 3D Feel</div>
         <div class="card-title">Moving Pyramid</div>
@@ -485,10 +562,12 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
-
+ 
     <!-- Card 4 -->
     <div class="project-card reveal" style="transition-delay:0.2s">
-      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-media">
+        <video src="videos/blooming-flowers.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+      </div>
       <div class="card-info">
         <div class="card-tag">Nature · Organic Motion</div>
         <div class="card-title">Blooming Flowers</div>
@@ -496,10 +575,12 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
-
+ 
     <!-- Card 5 -->
     <div class="project-card reveal" style="transition-delay:0.25s">
-      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-media">
+        <video src="videos/duik-angela.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+      </div>
       <div class="card-info">
         <div class="card-tag">Character · Rigging</div>
         <div class="card-title">Exploring Duik Angela</div>
@@ -507,10 +588,12 @@ footer{
         <div class="card-tool">After Effects · Duik</div>
       </div>
     </div>
-
+ 
     <!-- Card 6 — Cat Animation -->
     <div class="project-card reveal" style="transition-delay:0.3s">
-      <div class="card-media" style="min-height:200px;background:var(--off);"></div>
+      <div class="card-media">
+        <video src="videos/cat.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+      </div>
       <div class="card-info">
         <div class="card-tag">Character · Loop</div>
         <div class="card-title">Wiggling Cat</div>
@@ -518,7 +601,7 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
-
+ 
     <!-- Card 7 — Elastic Poster -->
     <div class="project-card reveal" style="transition-delay:0.35s">
       <div class="card-media" style="min-height:200px;background:var(--off);">
@@ -531,7 +614,7 @@ footer{
         <div class="card-tool">After Effects · Illustrator</div>
       </div>
     </div>
-
+ 
     <!-- Card 8 — Glad Sommar Poster -->
     <div class="project-card reveal" style="transition-delay:0.4s">
       <div class="card-media" style="min-height:200px;background:var(--off);">
@@ -544,10 +627,10 @@ footer{
         <div class="card-tool">After Effects · Illustrator</div>
       </div>
     </div>
-
+ 
   </div>
 </section>
-
+ 
 <!-- ABOUT -->
 <section class="about" id="about">
   <div class="reveal">
@@ -585,7 +668,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- CV SECTION -->
 <section style="position:relative;z-index:1;padding:6rem 4rem;background:var(--off);" id="cv">
   <div class="reveal" style="max-width:900px;margin:0 auto;">
@@ -601,7 +684,7 @@ footer{
     </div>
   </div>
 </section>
-
+ 
 <!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="section-label reveal">Get In Touch</div>
@@ -613,12 +696,12 @@ footer{
     <a href="https://www.linkedin.com/in/umaimaqazi/" target="_blank" class="social-link">LinkedIn</a>
   </div>
 </section>
-
+ 
 <footer>
   <div>© 2026 Umaima Saeed Qazi — UMINO</div>
   <div>2D Animator · Hyper Island</div>
 </footer>
-
+ 
 <script>
 // custom cursor
 const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
@@ -630,7 +713,7 @@ document.querySelectorAll('a,button,.project-card,.upload-slot').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover');});
   el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover');});
 });
-
+ 
 // bg canvas — flowing brush lines
 const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
 function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
@@ -671,11 +754,11 @@ function tick(){
   requestAnimationFrame(tick);
 }
 tick();
-
+ 
 // scroll reveal
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
-
+ 
 // hover play video
 document.querySelectorAll('.project-card').forEach(card=>{
   const vid=card.querySelector('video');
@@ -683,7 +766,7 @@ document.querySelectorAll('.project-card').forEach(card=>{
   card.addEventListener('mouseenter',()=>{vid.play();});
   card.addEventListener('mouseleave',()=>{vid.pause();vid.currentTime=0;});
 });
-
+ 
 // video upload
 document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
   input.addEventListener('change',function(){
@@ -702,3 +785,4 @@ document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
 </script>
 </body>
 </html>
+ 
