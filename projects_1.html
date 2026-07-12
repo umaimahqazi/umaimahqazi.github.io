@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Projects — Umaima Saeed Qazi · 2D Animator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --white:#fafaf8;
+  --off:#f2f0eb;
+  --ink:#1c1b19;
+  --muted:#8a8780;
+  --accent:#b85c38;
+  --accent2:#d4a853;
+  --border:rgba(28,27,25,0.09);
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--white);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+}
+.cursor{
+  position:fixed;width:8px;height:8px;
+  background:var(--ink);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,background 0.2s,width 0.2s,height 0.2s;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(28,27,25,0.3);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.15s ease;
+}
+.cursor.hover{width:14px;height:14px;background:var(--accent);}
+.cursor-ring.hover{width:48px;height:48px;border-color:var(--accent);opacity:0.5;}
+#bg{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;
+  opacity:0.07;
+}
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.4rem 4rem;
+  background:rgba(250,250,248,0.85);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+}
+nav ul{list-style:none;display:flex;gap:2.5rem;}
+nav a:not(.logo){
+  text-decoration:none;
+  font-size:0.78rem;font-weight:400;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  transition:color 0.2s;
+}
+nav a:hover:not(.logo){color:var(--accent);}
+nav a.active{color:var(--accent);}
+
+/* page header */
+.page-header{
+  position:relative;z-index:1;
+  padding:10rem 4rem 4rem;
+  max-width:1000px;
+}
+.page-eyebrow{
+  font-size:0.72rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:0.8rem;
+}
+.page-eyebrow::before{
+  content:'';width:2.5rem;height:1px;
+  background:var(--accent);display:inline-block;
+}
+.page-header h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,6vw,5rem);
+  line-height:1;
+  font-weight:300;
+  color:var(--ink);
+  margin-bottom:1.5rem;
+}
+.page-header h1 em{font-style:italic;color:var(--accent);}
+.page-header p{
+  font-size:1rem;font-weight:300;
+  color:var(--muted);line-height:1.8;
+  max-width:52ch;
+}
+
+/* project section */
+.proj-section{
+  position:relative;z-index:1;
+  padding:3rem 4rem;
+}
+.proj-category{
+  font-size:0.7rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:0.6rem;
+}
+.proj-cat-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.5rem);
+  font-weight:300;line-height:1.1;
+  margin-bottom:2.5rem;
+}
+.proj-cat-title em{font-style:italic;}
+
+/* project block */
+.proj-block{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:3rem;
+  align-items:center;
+  margin-bottom:4rem;
+  padding-bottom:4rem;
+  border-bottom:1px solid var(--border);
+}
+.proj-block:last-child{border-bottom:none;}
+.proj-block.reverse{grid-template-columns:1fr 1.4fr;}
+.proj-block.reverse .proj-media{order:2;}
+.proj-block.reverse .proj-text{order:1;}
+
+.proj-media{
+  border-radius:2px;
+  overflow:hidden;
+  background:var(--off);
+  box-shadow:0 8px 40px rgba(0,0,0,0.08);
+  line-height:0;
+}
+.proj-media video,.proj-media img{
+  width:100%;height:auto;
+  display:block;
+}
+
+.proj-tag{
+  display:inline-block;
+  background:rgba(184,92,56,0.08);
+  color:var(--accent);
+  font-size:0.65rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  padding:0.3rem 0.8rem;
+  border-radius:2px;
+  margin-bottom:1rem;
+}
+.proj-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;
+  font-weight:400;
+  margin-bottom:1rem;
+  line-height:1.1;
+}
+.proj-desc{
+  font-size:0.95rem;
+  font-weight:300;
+  color:var(--muted);
+  line-height:1.8;
+  margin-bottom:1.2rem;
+}
+.proj-meta{
+  display:flex;flex-wrap:wrap;gap:0.5rem;
+}
+.proj-chip{
+  padding:0.35rem 0.9rem;
+  border:1px solid var(--border);
+  border-radius:100px;
+  font-size:0.72rem;
+  color:var(--muted);
+  letter-spacing:0.05em;
+}
+
+/* CTA back */
+.back-cta{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:5rem 4rem 7rem;
+}
+.back-cta h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:300;margin-bottom:1.5rem;
+}
+.back-cta h2 em{font-style:italic;color:var(--accent);}
+.btn{
+  display:inline-block;padding:0.8rem 2rem;
+  font-size:0.75rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;border-radius:1px;
+  transition:all 0.2s;
+}
+.btn-dark{background:var(--ink);color:var(--white);}
+.btn-dark:hover{background:var(--accent);}
+
+footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.72rem;color:var(--muted);
+  letter-spacing:0.06em;
+  flex-wrap:wrap;gap:1rem;
+  z-index:1;position:relative;
+}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem;}
+  nav ul{gap:1.2rem;}
+  .page-header{padding:8rem 1.5rem 2rem;}
+  .proj-section{padding:2rem 1.5rem;}
+  .proj-block,.proj-block.reverse{grid-template-columns:1fr;gap:1.5rem;}
+  .proj-block.reverse .proj-media{order:1;}
+  .proj-block.reverse .proj-text{order:2;}
+  .back-cta{padding:3rem 1.5rem 5rem;}
+  footer{padding:1.5rem;}
+  body{cursor:auto;}
+  .cursor,.cursor-ring{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+<canvas id="bg"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">Umino</a>
+  <ul>
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="projects.html" class="active">Projects</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-eyebrow">Client, Group &amp; Internship Work</div>
+  <h1>Projects &amp; <em>Collaborations</em></h1>
+  <p>A closer look at the real-world briefs, team collaborations, and internship work I've been part of — where creative ideas meet real deadlines, clients, and collaboration.</p>
+</section>
+
+<!-- CLIENT WORK -->
+<section class="proj-section">
+  <div class="proj-category">01 — Client Work</div>
+  <h2 class="proj-cat-title">Real <em>Client</em> Projects</h2>
+
+  <div class="proj-block reveal">
+    <div class="proj-media">
+      <div style="padding:56.25% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1209233650?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="True Original"></iframe>
+      </div>
+    </div>
+    <div class="proj-text">
+      <span class="proj-tag">Client · Illustration &amp; Animation</span>
+      <h3 class="proj-title">True Original</h3>
+      <p class="proj-desc">Illustration and animation created for True Original — a blockchain-secured digital certificate platform trusted by 200+ organisations across 15+ countries. I delivered a motion ad as part of a focused project brief, translating their brand into engaging, on-message visual storytelling.</p>
+      <div class="proj-meta">
+        <span class="proj-chip">Illustrator</span>
+        <span class="proj-chip">After Effects</span>
+        <span class="proj-chip">Motion Ad</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROUP PROJECT -->
+<section class="proj-section">
+  <div class="proj-category">02 — Group Project</div>
+  <h2 class="proj-cat-title">Team <em>Collaboration</em></h2>
+
+  <div class="proj-block reverse reveal">
+    <div class="proj-media">
+      <div style="padding:56.25% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1209233649?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hazy Hearts"></iframe>
+      </div>
+    </div>
+    <div class="proj-text">
+      <span class="proj-tag">Group Project · Hyper Island</span>
+      <h3 class="proj-title">Hazy Hearts</h3>
+      <p class="proj-desc">A collaborative motion design project themed around a Nintendo game, created with a multidisciplinary team at Hyper Island. Together we developed the concept, visual direction, and motion — a great exercise in creative teamwork and shared storytelling.</p>
+      <div class="proj-meta">
+        <span class="proj-chip">After Effects</span>
+        <span class="proj-chip">Team Project</span>
+        <span class="proj-chip">Game Themed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERNSHIP -->
+<section class="proj-section">
+  <div class="proj-category">03 — Internship</div>
+  <h2 class="proj-cat-title">Internship at <em>Skillground</em></h2>
+
+  <div class="proj-block reveal">
+    <div class="proj-media">
+      <div style="padding:56.34% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1209229608?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Kungsbacka Municipality"></iframe>
+      </div>
+    </div>
+    <div class="proj-text">
+      <span class="proj-tag">Internship · Skillground</span>
+      <h3 class="proj-title">Kungsbacka Municipality</h3>
+      <p class="proj-desc">A collaborative motion design sequence created during my internship at Skillground for Kungsbacka Municipality. Working as part of a team, I contributed animation to a real client brief — bringing the project to life through motion and visual storytelling.</p>
+      <div class="proj-meta">
+        <span class="proj-chip">After Effects</span>
+        <span class="proj-chip">Team Project</span>
+        <span class="proj-chip">Real Client</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BACK CTA -->
+<section class="back-cta reveal">
+  <h2>Want to see <em>more</em>?</h2>
+  <a href="index.html#work" class="btn btn-dark">View All Animations</a>
+</section>
+
+<footer>
+  <div>© 2026 Umaima Saeed Qazi — UMINO</div>
+  <div>2D Animator · Hyper Island</div>
+</footer>
+
+<script>
+// custom cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('a,button,.proj-media').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover');});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover');});
+});
+
+// bg canvas — flowing brush lines
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const lines=[];
+for(let i=0;i<12;i++) lines.push(newLine(true));
+function newLine(rand){
+  const a=Math.random()*Math.PI*2,sp=0.3+Math.random()*0.5;
+  return{
+    x:rand?Math.random()*window.innerWidth:Math.random()<0.5?0:window.innerWidth,
+    y:rand?Math.random()*window.innerHeight:Math.random()*window.innerHeight,
+    vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
+    curl:(Math.random()-0.5)*0.012,
+    pts:[],age:0,maxAge:400+Math.random()*300,
+    w:0.4+Math.random()*0.8
+  };
+}
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    const a=Math.atan2(l.vy,l.vx)+l.curl,sp=Math.hypot(l.vx,l.vy);
+    l.vx=Math.cos(a)*sp;l.vy=Math.sin(a)*sp;
+    l.x+=l.vx;l.y+=l.vy;
+    l.pts.push([l.x,l.y]);
+    if(l.pts.length>120)l.pts.shift();
+    l.age++;
+    if(l.pts.length>1){
+      ctx.beginPath();
+      ctx.strokeStyle='#1c1b19';ctx.lineWidth=l.w;
+      ctx.lineCap='round';ctx.lineJoin='round';
+      ctx.moveTo(l.pts[0][0],l.pts[0][1]);
+      for(let p=1;p<l.pts.length;p++) ctx.lineTo(l.pts[p][0],l.pts[p][1]);
+      ctx.stroke();
+    }
+    if(l.age>l.maxAge||l.x<-80||l.x>window.innerWidth+80||l.y<-80||l.y>window.innerHeight+80) lines[i]=newLine(false);
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+// scroll reveal
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+// hover play video (skips Vimeo iframes which have no video element)
+document.querySelectorAll('.proj-media').forEach(media=>{
+  const vid=media.querySelector('video');
+  if(!vid)return;
+  media.addEventListener('mouseenter',()=>{vid.play();});
+  media.addEventListener('mouseleave',()=>{vid.pause();});
+});
+</script>
+</body>
+</html>
