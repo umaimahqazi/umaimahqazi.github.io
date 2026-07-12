@@ -24,7 +24,7 @@ body{
   overflow-x:hidden;
   cursor:none;
 }
- 
+
 /* custom cursor */
 .cursor{
   position:fixed;width:8px;height:8px;
@@ -42,7 +42,7 @@ body{
 }
 .cursor.hover{width:14px;height:14px;background:var(--accent);}
 .cursor-ring.hover{width:48px;height:48px;border-color:var(--accent);opacity:0.5;}
- 
+
 /* canvas */
 #bg{
   position:fixed;top:0;left:0;
@@ -50,7 +50,7 @@ body{
   pointer-events:none;z-index:0;
   opacity:0.07;
 }
- 
+
 /* nav */
 nav{
   position:fixed;top:0;left:0;right:0;
@@ -77,7 +77,7 @@ nav a:not(.logo){
   transition:color 0.2s;
 }
 nav a:hover:not(.logo){color:var(--accent);}
- 
+
 /* hero */
 .hero{
   position:relative;z-index:1;
@@ -127,7 +127,7 @@ h1 em{font-style:italic;color:var(--accent);}
 .btn-dark:hover{background:var(--accent);}
 .btn-outline{border:1px solid var(--ink);color:var(--ink);}
 .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
- 
+
 .hero-right{
   display:flex;align-items:center;justify-content:center;
 }
@@ -136,7 +136,7 @@ h1 em{font-style:italic;color:var(--accent);}
   aspect-ratio:1;
   position:relative;
 }
- 
+
 /* scroll indicator */
 .scroll-hint{
   position:absolute;bottom:2.5rem;left:4rem;
@@ -154,7 +154,7 @@ h1 em{font-style:italic;color:var(--accent);}
   0%,100%{transform:scaleX(1);opacity:0.5;}
   50%{transform:scaleX(1.4);opacity:1;}
 }
- 
+
 /* section base */
 section{position:relative;z-index:1;}
 .section-header{margin-bottom:3.5rem;}
@@ -169,7 +169,7 @@ section{position:relative;z-index:1;}
   font-weight:300;line-height:1.1;
 }
 .section-title em{font-style:italic;}
- 
+
 /* work */
 .work{padding:6rem 4rem;}
 .work-header{
@@ -189,7 +189,7 @@ section{position:relative;z-index:1;}
   display:inline-block;
   width:100%;
 }
- 
+
 .card-media{
   width:100%;
   position:relative;
@@ -202,7 +202,7 @@ section{position:relative;z-index:1;}
   transition:transform 0.6s ease;
 }
 .project-card:hover .card-media video,.project-card:hover .card-media img{transform:scale(1.04);}
- 
+
 .card-info{padding:1.25rem 1.5rem 1.5rem;}
 .card-tag{
   font-size:0.65rem;letter-spacing:0.16em;
@@ -224,7 +224,7 @@ section{position:relative;z-index:1;}
   text-transform:uppercase;color:var(--muted);
   opacity:0.7;
 }
- 
+
 /* upload zone */
 .upload-section{
   padding:4rem;
@@ -261,7 +261,7 @@ section{position:relative;z-index:1;}
   color:var(--ink);font-weight:500;
 }
 .upload-slot.loaded{border-color:var(--accent);border-style:solid;}
- 
+
 /* about */
 .about{
   padding:7rem 4rem;
@@ -305,7 +305,7 @@ section{position:relative;z-index:1;}
   text-transform:uppercase;
   color:rgba(255,255,255,0.35);
 }
- 
+
 /* contact */
 .contact{
   padding:8rem 4rem;
@@ -342,7 +342,7 @@ section{position:relative;z-index:1;}
   transition:color 0.2s;
 }
 .social-link:hover{color:var(--accent);}
- 
+
 /* footer */
 footer{
   border-top:1px solid var(--border);
@@ -353,11 +353,11 @@ footer{
   flex-wrap:wrap;gap:1rem;
   z-index:1;position:relative;
 }
- 
+
 /* reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.9s ease,transform 0.9s ease;}
 .reveal.visible{opacity:1;transform:none;}
- 
+
 /* responsive */
 @media(max-width:900px){
   nav{padding:1.2rem 1.5rem;}
@@ -375,11 +375,11 @@ footer{
 </style>
 </head>
 <body>
- 
+
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curRing"></div>
 <canvas id="bg"></canvas>
- 
+
 <nav>
   <a class="logo" href="#">Umino</a>
   <ul>
@@ -389,7 +389,7 @@ footer{
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
- 
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
@@ -438,7 +438,7 @@ footer{
     Scroll to explore
   </div>
 </section>
- 
+
 <!-- WORK -->
 <section class="work" id="work">
   <div class="work-header reveal">
@@ -447,9 +447,9 @@ footer{
       <h2 class="section-title">Animations &amp; <em>Projects</em></h2>
     </div>
   </div>
- 
+
   <div class="project-grid">
- 
+
     <!-- Card 1 -->
     <div class="project-card reveal" style="transition-delay:0.05s">
       <div class="card-media">
@@ -462,7 +462,7 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
- 
+
     <!-- Card 2 -->
     <div class="project-card reveal" style="transition-delay:0.1s">
       <div class="card-media">
@@ -475,7 +475,7 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
- 
+
     <!-- Card 3 -->
     <div class="project-card reveal" style="transition-delay:0.15s">
       <div class="card-media">
@@ -488,7 +488,7 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
- 
+
     <!-- Card 4 -->
     <div class="project-card reveal" style="transition-delay:0.2s">
       <div class="card-media">
@@ -501,7 +501,7 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
- 
+
     <!-- Card 5 -->
     <div class="project-card reveal" style="transition-delay:0.25s">
       <div class="card-media">
@@ -514,7 +514,7 @@ footer{
         <div class="card-tool">After Effects · Duik</div>
       </div>
     </div>
- 
+
     <!-- Card 6 — Cat Animation -->
     <div class="project-card reveal" style="transition-delay:0.3s">
       <div class="card-media">
@@ -527,7 +527,7 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
- 
+
     <!-- Card 7 — Hope Character -->
     <div class="project-card reveal" style="transition-delay:0.35s">
       <div class="card-media">
@@ -540,11 +540,11 @@ footer{
         <div class="card-tool">Illustrator · After Effects</div>
       </div>
     </div>
- 
+
     <!-- Card 8 — Elastic Poster -->
     <div class="project-card reveal" style="transition-delay:0.4s">
       <div class="card-media">
-        <img src="posters/elasticgif.gif" alt="Elastic — Snap Athletic"/>
+        <img src="posters/elasticgif (2).gif" alt="Elastic — Snap Athletic"/>
       </div>
       <div class="card-info">
         <div class="card-tag">Motion Poster · GIF</div>
@@ -553,7 +553,7 @@ footer{
         <div class="card-tool">After Effects · Illustrator</div>
       </div>
     </div>
- 
+
     <!-- Card 9 — Glad Sommar Poster -->
     <div class="project-card reveal" style="transition-delay:0.45s">
       <div class="card-media">
@@ -566,7 +566,7 @@ footer{
         <div class="card-tool">After Effects · Illustrator</div>
       </div>
     </div>
- 
+
     <!-- Card 10 — Overflow -->
     <div class="project-card reveal" style="transition-delay:0.5s">
       <div class="card-media">
@@ -579,10 +579,10 @@ footer{
         <div class="card-tool">After Effects</div>
       </div>
     </div>
- 
+
   </div>
 </section>
- 
+
 <!-- ABOUT -->
 <section class="about" id="about">
   <div class="reveal">
@@ -620,7 +620,7 @@ footer{
     </div>
   </div>
 </section>
- 
+
 <!-- CV SECTION -->
 <section style="position:relative;z-index:1;padding:6rem 4rem;background:var(--off);" id="cv">
   <div class="reveal" style="max-width:900px;margin:0 auto;">
@@ -636,7 +636,7 @@ footer{
     </div>
   </div>
 </section>
- 
+
 <!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="section-label reveal">Get In Touch</div>
@@ -648,12 +648,12 @@ footer{
     <a href="https://www.linkedin.com/in/umaimaqazi/" target="_blank" class="social-link">LinkedIn</a>
   </div>
 </section>
- 
+
 <footer>
   <div>© 2026 Umaima Saeed Qazi — UMINO</div>
   <div>2D Animator · Hyper Island</div>
 </footer>
- 
+
 <script>
 // custom cursor
 const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
@@ -665,7 +665,7 @@ document.querySelectorAll('a,button,.project-card,.upload-slot').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover');});
   el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover');});
 });
- 
+
 // bg canvas — flowing brush lines
 const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
 function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
@@ -706,11 +706,11 @@ function tick(){
   requestAnimationFrame(tick);
 }
 tick();
- 
+
 // scroll reveal
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
- 
+
 // hover play video
 document.querySelectorAll('.project-card').forEach(card=>{
   const vid=card.querySelector('video');
@@ -718,7 +718,7 @@ document.querySelectorAll('.project-card').forEach(card=>{
   card.addEventListener('mouseenter',()=>{vid.play();});
   card.addEventListener('mouseleave',()=>{vid.pause();vid.currentTime=0;});
 });
- 
+
 // video upload
 document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
   input.addEventListener('change',function(){
@@ -737,4 +737,3 @@ document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
 </script>
 </body>
 </html>
- 
