@@ -269,8 +269,10 @@ footer{
   <h2 class="proj-cat-title">Real <em>Client</em> Projects</h2>
 
   <div class="proj-block reveal">
-    <div class="proj-media proj-text-hover">
-      <video src="videos/true-original.mp4" loop muted playsinline preload="metadata" controls></video>
+    <div class="proj-media">
+      <div style="padding:56.25% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1209233650?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="True Original"></iframe>
+      </div>
     </div>
     <div class="proj-text">
       <span class="proj-tag">Client · Illustration &amp; Animation</span>
@@ -292,7 +294,9 @@ footer{
 
   <div class="proj-block reverse reveal">
     <div class="proj-media">
-      <video src="videos/hazy-hearts.mp4" loop muted playsinline preload="metadata" controls></video>
+      <div style="padding:56.25% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1209233649?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Hazy Hearts"></iframe>
+      </div>
     </div>
     <div class="proj-text">
       <span class="proj-tag">Group Project · Hyper Island</span>
@@ -314,7 +318,9 @@ footer{
 
   <div class="proj-block reveal">
     <div class="proj-media">
-      <video src="videos/kungsbacka.mp4" loop muted playsinline preload="metadata" controls></video>
+      <div style="padding:56.34% 0 0 0;position:relative;">
+        <iframe src="https://player.vimeo.com/video/1209229608?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Kungsbacka Municipality"></iframe>
+      </div>
     </div>
     <div class="proj-text">
       <span class="proj-tag">Internship · Skillground</span>
@@ -397,7 +403,7 @@ tick();
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 
-// hover play video
+// hover play video (skips Vimeo iframes which have no video element)
 document.querySelectorAll('.proj-media').forEach(media=>{
   const vid=media.querySelector('video');
   if(!vid)return;
