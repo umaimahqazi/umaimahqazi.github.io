@@ -177,15 +177,15 @@ section{position:relative;z-index:1;}
   align-items:flex-end;margin-bottom:3.5rem;flex-wrap:wrap;gap:1rem;
 }
 .project-grid{
-  column-count:2;
-  column-gap:1.5rem;
+  column-count:3;
+  column-gap:1.25rem;
 }
 .project-card{
   position:relative;background:var(--off);
   border-radius:2px;overflow:hidden;
   cursor:none;
   break-inside:avoid;
-  margin-bottom:1.5rem;
+  margin-bottom:1.25rem;
   display:inline-block;
   width:100%;
 }
@@ -359,6 +359,9 @@ footer{
 .reveal.visible{opacity:1;transform:none;}
 
 /* responsive */
+@media(max-width:1100px){
+  .project-grid{column-count:2;}
+}
 @media(max-width:900px){
   nav{padding:1.2rem 1.5rem;}
   .hero{grid-template-columns:1fr;padding:7rem 1.5rem 3rem;gap:3rem;}
@@ -395,7 +398,7 @@ footer{
   <div class="hero-left">
     <div class="hero-eyebrow">2D Animator · Motion Designer</div>
     <h1>Motion<br/>that <em>speaks</em><br/>for itself.</h1>
-    <p class="hero-desc">I'm Umaima — I bring ideas to life through expressive 2D animation, character movement, and storytelling. Fresh from Hyper Island, open to the world.</p>
+    <p class="hero-desc">I'm Umaima, and I love bringing ideas to life through 2D animation, character movement, and storytelling. Fresh out of Hyper Island and ready for what's next.</p>
     <div class="hero-actions">
       <a href="#work" class="btn btn-dark">See My Work</a>
       <a href="#contact" class="btn btn-outline">Let's Talk</a>
@@ -458,7 +461,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Environment · Loop</div>
         <div class="card-title">Day to Night</div>
-        <div class="card-desc">A seamless looping scene capturing the magic hour — the sky shifts from warm golden light into a deep, star-lit night.</div>
+        <div class="card-desc">A looping scene that captures that golden hour feeling, where the sky slowly shifts from warm daylight into a calm, starry night.</div>
         <div class="card-tool">After Effects</div>
       </div>
     </div>
@@ -471,7 +474,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Principles · Exercise</div>
         <div class="card-title">Bouncing Ball</div>
-        <div class="card-desc">The classic animation foundation — squash, stretch, anticipation and follow-through, perfected.</div>
+        <div class="card-desc">One of the first things every animator learns. A simple bouncing ball, but a great way to play with squash, stretch, and timing.</div>
         <div class="card-tool">After Effects</div>
       </div>
     </div>
@@ -484,7 +487,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Motion · 3D Feel</div>
         <div class="card-title">Moving Pyramid</div>
-        <div class="card-desc">Geometric motion study exploring rotation, depth, and spatial awareness in a flat 2D plane.</div>
+        <div class="card-desc">A little motion study where I played with rotation and depth, trying to give a flat shape a sense of space and movement.</div>
         <div class="card-tool">After Effects</div>
       </div>
     </div>
@@ -497,7 +500,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Nature · Organic Motion</div>
         <div class="card-title">Blooming Flowers</div>
-        <div class="card-desc">An organic animation capturing the delicate, rhythmic unfurling of petals — nature's own easing curves.</div>
+        <div class="card-desc">An animation of flowers slowly opening up. I wanted the movement to feel soft and natural, like they were really growing.</div>
         <div class="card-tool">After Effects</div>
       </div>
     </div>
@@ -510,7 +513,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Character · Rigging</div>
         <div class="card-title">Exploring Duik Angela</div>
-        <div class="card-desc">Character rigging and walk cycle exploration using Duik Angela — bringing a jointed figure to fluid, natural life.</div>
+        <div class="card-desc">Here I explored character rigging with Duik Angela, building a walk cycle and learning how to make a jointed character move smoothly.</div>
         <div class="card-tool">After Effects · Duik</div>
       </div>
     </div>
@@ -523,7 +526,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Character · Loop</div>
         <div class="card-title">Wiggling Cat</div>
-        <div class="card-desc">A charming looping character animation — a playful cat with a life of its own, one wiggle at a time.</div>
+        <div class="card-desc">A fun little looping animation of a cat with a wiggling tail. I made this one just because I enjoy animating cute characters.</div>
         <div class="card-tool">After Effects</div>
       </div>
     </div>
@@ -536,7 +539,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Character · Illustration to Motion</div>
         <div class="card-title">Hope</div>
-        <div class="card-desc">A character animation built from a single illustration — I recreated the character artwork in Illustrator and brought it to life in After Effects, showcasing my full workflow from static art to fluid motion.</div>
+        <div class="card-desc">I started with a single drawing of this character, redrew it in Illustrator, and then animated it in After Effects. A nice way to show my full process from art to motion.</div>
         <div class="card-tool">Illustrator · After Effects</div>
       </div>
     </div>
@@ -549,7 +552,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Motion Poster · GIF</div>
         <div class="card-title">Elastic — Snap Athletic</div>
-        <div class="card-desc">A high-energy animated poster for a gym brand — bold typography, gritty textures, and kinetic motion that hits as hard as the workout.</div>
+        <div class="card-desc">An animated poster I made for a gym brand. I went for bold text and a rough, energetic style to match the feeling of a good workout.</div>
         <div class="card-tool">After Effects · Illustrator</div>
       </div>
     </div>
@@ -562,7 +565,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Motion Poster · GIF</div>
         <div class="card-title">Glad Sommar</div>
-        <div class="card-desc">A warm and playful Swedish summer poster — "Happy Summer" brought to life with cheerful motion and a light, seasonal energy.</div>
+        <div class="card-desc">A cheerful summer poster (Glad Sommar means Happy Summer in Swedish). I wanted it to feel light, warm, and full of that summer holiday mood.</div>
         <div class="card-tool">After Effects · Illustrator</div>
       </div>
     </div>
@@ -575,7 +578,7 @@ footer{
       <div class="card-info">
         <div class="card-tag">Kinetic Typography · Motion</div>
         <div class="card-title">Overflow</div>
-        <div class="card-desc">A kinetic typography piece where letters and words move with rhythm and energy — exploring how text itself can carry emotion and motion.</div>
+        <div class="card-desc">A kinetic typography piece where the words move and flow with rhythm. I liked playing with how text alone can carry energy and feeling.</div>
         <div class="card-tool">After Effects</div>
       </div>
     </div>
@@ -588,9 +591,9 @@ footer{
   <div class="reveal">
     <div class="section-label">About Me</div>
     <h2 class="section-title" style="margin-bottom:1.5rem">Storyteller.<br/><em>Frame chaser.</em><br/>Collaborator.</h2>
-    <p>I'm Umaima Saeed Qazi — a 2D animator and motion designer trained at Hyper Island, where I learned to blend creative instinct with professional craft.</p>
-    <p>I work across character animation, motion graphics, and organic storytelling. Whether it's a bouncing ball or a full character rig, I care about the feeling every frame creates.</p>
-    <p>Currently open to full-time roles, internships, freelance projects, and studio collaborations. Let's make something worth watching.</p>
+    <p>I'm Umaima Saeed Qazi, a 2D animator and motion designer trained at Hyper Island. That's where I really learned how to mix creative ideas with the practical side of the craft.</p>
+    <p>I enjoy working on all kinds of animation, from character work to motion graphics. Whether it's a simple bouncing ball or a full character rig, I care most about how each frame feels.</p>
+    <p>Right now I'm open to full-time roles, internships, freelance projects, and studio work. If you have something in mind, I'd love to hear about it.</p>
     <div class="tools-row">
       <span class="tool-chip">After Effects</span>
       <span class="tool-chip">Adobe Illustrator</span>
