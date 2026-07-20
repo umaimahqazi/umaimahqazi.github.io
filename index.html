@@ -25,23 +25,36 @@ body{
   cursor:none;
 }
 
-/* custom cursor */
+/* custom magnifying glass cursor - blue glass */
 .cursor{
-  position:fixed;width:8px;height:8px;
-  background:var(--ink);border-radius:50%;
+  position:fixed;
+  width:38px;height:38px;
   pointer-events:none;z-index:9999;
   transform:translate(-50%,-50%);
-  transition:transform 0.1s,background 0.2s,width 0.2s,height 0.2s;
+  transition:width 0.25s ease,height 0.25s ease,opacity 0.2s ease;
 }
-.cursor-ring{
-  position:fixed;width:36px;height:36px;
-  border:1px solid rgba(28,27,25,0.3);border-radius:50%;
-  pointer-events:none;z-index:9998;
-  transform:translate(-50%,-50%);
-  transition:all 0.15s ease;
+.cursor svg{width:100%;height:100%;display:block;}
+.cursor .glass-outer{
+  fill:none;
+  stroke:#3a3a3a;
+  stroke-width:3;
 }
-.cursor.hover{width:14px;height:14px;background:var(--accent);}
-.cursor-ring.hover{width:48px;height:48px;border-color:var(--accent);opacity:0.5;}
+.cursor .glass-lens{
+  fill:url(#blueLens);
+  opacity:0.28;
+}
+.cursor .glass-shine{
+  fill:rgba(255,255,255,0.7);
+}
+.cursor .glass-handle{
+  fill:#3a3a3a;
+}
+/* grows when hovering work */
+.cursor.hover{
+  width:62px;height:62px;
+}
+.cursor.hover .glass-lens{opacity:0.4;}
+.cursor-ring{display:none;}
 
 /* canvas */
 #bg{
@@ -369,12 +382,29 @@ footer{
   .contact{padding:5rem 1.5rem;}
   footer{padding:1.5rem;}
   .scroll-hint{left:1.5rem;}
+  body{cursor:auto;}
+  .cursor{display:none;}
 }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cur"></div>
+<div class="cursor" id="cur">
+  <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="blueLens" cx="38%" cy="35%" r="70%">
+        <stop offset="0%" stop-color="#eaf6ff"/>
+        <stop offset="55%" stop-color="#a8d4f5"/>
+        <stop offset="100%" stop-color="#7fb8e8"/>
+      </radialGradient>
+    </defs>
+    <!-- tapered handle: narrow near lens, broad at end -->
+    <path class="glass-handle" d="M32 32 L36 36 L54 57 Q56 59 57.5 57.5 Q59 56 57 54 L36 36 Z"/>
+    <circle class="glass-lens" cx="22" cy="22" r="15.5"/>
+    <ellipse class="glass-shine" cx="16" cy="15" rx="4.5" ry="3" transform="rotate(-35 16 15)"/>
+    <circle class="glass-outer" cx="22" cy="22" r="15.5"/>
+  </svg>
+</div>
 <div class="cursor-ring" id="curRing"></div>
 <canvas id="bg"></canvas>
 
@@ -451,7 +481,7 @@ footer{
     <!-- Card 1 -->
     <div class="project-card reveal" style="transition-delay:0.05s">
       <div class="card-media">
-        <video src="videos/day-night.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/day-night.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Environment · Loop</div>
@@ -463,7 +493,7 @@ footer{
     <!-- Card 2 -->
     <div class="project-card reveal" style="transition-delay:0.1s">
       <div class="card-media">
-        <video src="videos/bouncing-ball.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/bouncing-ball.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Principles · Exercise</div>
@@ -475,7 +505,7 @@ footer{
     <!-- Card 3 -->
     <div class="project-card reveal" style="transition-delay:0.15s">
       <div class="card-media">
-        <video src="videos/moving-pyramid.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/moving-pyramid.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Motion · 3D Feel</div>
@@ -487,7 +517,7 @@ footer{
     <!-- Card 4 -->
     <div class="project-card reveal" style="transition-delay:0.2s">
       <div class="card-media">
-        <video src="videos/blooming-flowers.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/blooming-flowers.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Nature · Organic Motion</div>
@@ -499,7 +529,7 @@ footer{
     <!-- Card 5 -->
     <div class="project-card reveal" style="transition-delay:0.25s">
       <div class="card-media">
-        <video src="videos/duik-angela.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/duik-angela.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Character · Rigging</div>
@@ -511,7 +541,7 @@ footer{
     <!-- Card 6 — Cat Animation -->
     <div class="project-card reveal" style="transition-delay:0.3s">
       <div class="card-media">
-        <video src="videos/cat.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/cat.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Character · Loop</div>
@@ -523,7 +553,7 @@ footer{
     <!-- Card 7 — Hope Character -->
     <div class="project-card reveal" style="transition-delay:0.35s">
       <div class="card-media">
-        <video src="videos/hope.mp4" loop muted playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>
+        <video data-src="videos/hope.mp4" loop muted playsinline preload="none" style="width:100%;height:auto;display:block;"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Character · Illustration to Motion</div>
@@ -559,7 +589,7 @@ footer{
     <!-- Card 10 — Overflow -->
     <div class="project-card reveal" style="transition-delay:0.5s">
       <div class="card-media">
-        <video src="videos/overflow.mp4" loop muted playsinline preload="metadata"></video>
+        <video data-src="videos/overflow.mp4" loop muted playsinline preload="none"></video>
       </div>
       <div class="card-info">
         <div class="card-tag">Kinetic Typography · Motion</div>
@@ -643,15 +673,14 @@ footer{
 </footer>
 
 <script>
-// custom cursor
-const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
-let mx=0,my=0,rx=0,ry=0;
+// custom magnifying glass cursor
+const cur=document.getElementById('cur');
+let mx=0,my=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
-animRing();
-document.querySelectorAll('a,button,.project-card,.upload-slot').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover');});
-  el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover');});
+// magnifying glass grows + shows plus only when hovering the work
+document.querySelectorAll('.project-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('hover');});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');});
 });
 
 // bg canvas — flowing brush lines
@@ -699,13 +728,26 @@ tick();
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 
-// hover play video
-document.querySelectorAll('.project-card').forEach(card=>{
-  const vid=card.querySelector('video');
-  if(!vid)return;
-  card.addEventListener('mouseenter',()=>{vid.play();});
-  card.addEventListener('mouseleave',()=>{vid.pause();vid.currentTime=0;});
-});
+// lazy-load videos: only download when they scroll near the viewport
+const lazyVids=document.querySelectorAll('video[data-src]');
+const vidObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    const vid=entry.target;
+    if(entry.isIntersecting){
+      // load the video the first time it comes near
+      if(!vid.src){
+        vid.src=vid.dataset.src;
+        vid.load();
+      }
+      // play while visible
+      vid.play().catch(()=>{});
+    }else{
+      // pause when scrolled away to save resources
+      if(vid.src) vid.pause();
+    }
+  });
+},{rootMargin:'200px 0px',threshold:0.1});
+lazyVids.forEach(v=>vidObserver.observe(v));
 
 // video upload
 document.querySelectorAll('.upload-slot input[type=file]').forEach(input=>{
